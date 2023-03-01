@@ -3,7 +3,7 @@ import { useReducer } from "react";
 import GlobalContext from './global-context'
 import reducer from "./global-reducer";
 
-const GlobalProvider = (props: any) => {
+const GlobalProvider: React.FC<any>  = (props) => {
 	const [globalState, dispatchGlobalAction] = useReducer(
 		reducer,
 		{}
