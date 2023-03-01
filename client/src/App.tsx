@@ -1,9 +1,10 @@
 import GlobalProvider from "./context/global-provider";
+import  MainLayout  from "./components/MainLayout/mainLayout";
 
 const App = () => {
   return (
     <GlobalProvider>
-      <div>Hackathon 1.0</div>
+      <MainLayout/>
     </GlobalProvider>
   );
 }
