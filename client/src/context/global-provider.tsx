@@ -1,4 +1,4 @@
-import { useReducer,useState } from "react";
+import { useEffect, useReducer,useState } from "react";
 
 import GlobalContext from './global-context'
 import reducer from "./global-reducer";
@@ -12,13 +12,19 @@ const initGlobalContext : IGlobalContextType = {
 
 const GlobalProvider: React.FC<any>  = (props) => {
 
-	const [globalState, dispatchGlobalAction] = useReducer(
+	console.log('zzzzz')
+	useEffect(() => {
+	  
+	}, [])
+	
+
+	const [globalState, dispatchGlobalAction] : [IGlobalContextType, (type: any) => void] = useReducer(
 		reducer,
-		{}
+		initGlobalContext
 	);
 
 	return (
-		<GlobalContext.Provider value={initGlobalContext}>
+		<GlobalContext.Provider value={globalState}>
 			{props.children}
 		</GlobalContext.Provider>
 	);

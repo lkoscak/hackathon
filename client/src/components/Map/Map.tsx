@@ -2,7 +2,7 @@ import { useLoadScript } from "@react-google-maps/api"
 
 import { MapContainer } from "./MapStyle";
 
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import {
   GoogleMap,
   MarkerF,
@@ -21,6 +21,18 @@ type MapOptions = google.maps.MapOptions;
 const Map = () => {
 
     const {reports} = useGlobalContext();
+    console.log(reports)
+
+    useEffect(() => {
+      console.log('useefect')
+      //mapRef.current?.fitBounds(new google.maps.LatLngBounds());
+      
+      setInterval(()=>{
+		console.log('sdfsdf')
+		mapRef.current?.setZoom(5);
+	  }, 3000)
+    }, [reports])
+    
 
     const mapCenter = useMemo<LatLngLiteral>(() => ({
         lat: 46.305746,
@@ -32,7 +44,7 @@ const Map = () => {
         clickableIcons: false,
       }), [])
 
-    const mapRef = useRef<GoogleMap>()
+    const mapRef = useRef<any>()
 
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: 'AIzaSyAVKiCx1vsLNJjQ2g5gXJwzF8vVihFQjY8',
@@ -40,7 +52,7 @@ const Map = () => {
 
     const onLoad = useCallback((map: any) => {
         mapRef.current = map
-        console.log(reports)
+        console.log('map loaded')
     }, []);
 
     //const onMarkerLoad = useCallback((marker: any) => {
