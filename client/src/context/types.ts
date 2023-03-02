@@ -1,18 +1,20 @@
-type Report = {
+export type Report = {
     id:string,
     title:string,
     description:string,
     created:string,
-    creator:string,
+    creator:string | null,
     images:string[],
     status:number,
+    group: number,
+    category: string,
     team:number,
     lat:number,
     lng:number
 }
 
 
-export interface IGlobalContextType {
+export type IGlobalContextType = {
     reports:Report[]
 }
 

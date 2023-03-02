@@ -4,9 +4,10 @@ import GlobalContext from './global-context'
 import reducer from "./global-reducer";
 import {IGlobalContextType} from "../context/types";
 
+import {reports} from "../mocks/reports";
 
 const initGlobalContext : IGlobalContextType = {
-	reports :[]
+	reports : reports
 }
 
 const GlobalProvider: React.FC<any>  = (props) => {
