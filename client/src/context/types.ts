@@ -10,7 +10,10 @@ export type Report = {
     category: string,
     team:number,
     lat:number,
-    lng:number
+    lng:number,
+    additonallInfo: {
+        activeCount: number
+    }
 }
 
 

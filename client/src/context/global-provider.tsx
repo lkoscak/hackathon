@@ -12,9 +12,12 @@ const initGlobalContext : IGlobalContextType = {
 
 const GlobalProvider: React.FC<any>  = (props) => {
 
-	console.log('zzzzz')
 	useEffect(() => {
-	  
+	  const testInterval = setTimeout(()=>{
+		console.log('new report')
+		dispatchGlobalAction({type: 'TEST'})
+	  }, 20000)
+	  //return ()=>{clearInterval(testInterval)}
 	}, [])
 	
 
