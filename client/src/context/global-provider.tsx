@@ -12,6 +12,7 @@ const initGlobalContext : IGlobalContextType = {
 
 const GlobalProvider: React.FC<any>  = (props) => {
 
+
 	useEffect(() => {
 	  const testInterval = setTimeout(()=>{
 		console.log('new report')
