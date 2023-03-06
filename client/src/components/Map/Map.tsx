@@ -14,7 +14,7 @@ import {
 
 import useGlobalContext from "../../hooks/use-global-context";
 
-import { markerIconsMap, getTopTenReportsForDisplay } from "../../utils/utils";
+import { markerIconsMap, getTopNReportsForDisplay } from "../../utils/utils";
 import { Report } from "../../context/types";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
@@ -25,9 +25,8 @@ const Map = () => {
     const [activeCounter, setActiveCounter] = useState<number>(1);
     const {reports} = useGlobalContext();
 
-    const topTenReportsForDisplay = useMemo(()=>getTopTenReportsForDisplay(reports), [reports])
+    const topTenReportsForDisplay= useMemo(()=>getTopNReportsForDisplay(reports, 10), [reports])
 
-    console.log(topTenReportsForDisplay)
 
     const handleActiveReport = (report: Report) => {
         if (report.id === activeReport?.id) {
@@ -41,7 +40,6 @@ const Map = () => {
     }, []);
 
     useEffect(() => {
-        console.log('new move interval')
         let focusMarkerInterval = setInterval(()=>{
             const nextActiveReport = fetchNextActiveReport()
             if(nextActiveReport){
@@ -58,7 +56,7 @@ const Map = () => {
         }, 3000)
 
         function fetchNextActiveReport(){
-            return topTenReportsForDisplay.find(report=>{
+            return topTenReportsForDisplay.find((report: Report)=>{
                 return report.additonallInfo.activeCount !== activeCounter
             })
         }
@@ -75,7 +73,7 @@ const Map = () => {
 
     const fitBoundsToReports = useCallback(() => {
         const bounds = new google.maps.LatLngBounds();
-        topTenReportsForDisplay.forEach(report => {bounds.extend({lat: report.lat, lng: report.lng})})
+        topTenReportsForDisplay.forEach((report: Report) => {bounds.extend({lat: report.lat, lng: report.lng})})
         mapRef.current?.fitBounds(bounds);
     }, [activeCounter])
 
@@ -99,14 +97,13 @@ const Map = () => {
     const onLoad = useCallback((map: google.maps.Map) => {
         mapRef.current = map
         fitBoundsToReports()
-        console.log('map loaded')
     }, []);
 
     if(!isLoaded){
         return <div>Loading...</div>
     }
-    const markersToDisplay: any = topTenReportsForDisplay.filter(report => report.lat !== null && report.lng !== null)
-    .map(report => <MarkerF key={report.id} position={{lat: report.lat, lng: report.lng}} icon={markerIconsMap.get(report.group)} onClick={()=>{handleActiveReport(report)}}>
+    const markersToDisplay: any = topTenReportsForDisplay.filter((report: Report) => report.lat !== null && report.lng !== null)
+    .map((report: Report) => <MarkerF key={report.id} position={{lat: report.lat, lng: report.lng}} icon={markerIconsMap.get(report.group)} onClick={()=>{handleActiveReport(report)}}>
         {activeReport !== null && activeReport.id === report.id ? (
                     <InfoWindowF position={{lat: activeReport.lat, lng: activeReport.lng} } onCloseClick={onInfoWindowClosing} options={{maxWidth: 300}}>
                         <InfoWindowContent report = {activeReport}></InfoWindowContent>

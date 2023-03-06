@@ -5,7 +5,9 @@ export const reports = [
         description: 'Na lijevoj strani cest nalazi se rupa od pola metra f wefefwfwef wfew wefw fwefw fwefwe fwf ew',
         created: '2023-03-01 12:00:00',
         creator: 'Luka Košćak',
-        images: [],
+        images: [
+            'https://cdn.24.co.za/files/Cms/General/d/3454/719b3beba6a544fcaff168dab3a4768f.jpg'
+        ],
         status: 1,
         group: 1,
         category: 'Problemi na cesti',

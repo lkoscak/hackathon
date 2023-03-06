@@ -10,8 +10,10 @@ export const markerIconsMap = new Map<number,string>(
     ]
 );
 
-export const getTopTenReportsForDisplay = (reports: Report[]) => {
+export const getTopNReportsForDisplay = (reports: Report[], n: number) => {
     return reports.sort((a, b) => {
         return new Date(b.created).getTime() - new Date(a.created).getTime();
-      });
+    }).slice(0, n);
 }
+
+export const generateUniqueId = ()=> Math.random().toString().replace(".", "M");

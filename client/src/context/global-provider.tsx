@@ -6,19 +6,34 @@ import {IGlobalContextType} from "../context/types";
 
 import {reports} from "../mocks/reports";
 
+import { Connect, subscriptions } from "../utils/mqtt";
+
 const initGlobalContext : IGlobalContextType = {
 	reports : reports
 }
 
 const GlobalProvider: React.FC<any>  = (props) => {
 
+	const [mqttClient, setMqttClient] = useState<any>(null)
+
+	const onMessageArrived = (topic: string, payload: any)=>{
+		console.log('Message arrived in provider')
+	}
+
+	//useEffect(() => {
+	//	const testInterval = setTimeout(()=>{
+	//		console.log('new report')
+	//		dispatchGlobalAction({type: 'TEST'})
+	//	}, 20000)
+	//}, [])
 
 	useEffect(() => {
-	  const testInterval = setTimeout(()=>{
-		console.log('new report')
-		dispatchGlobalAction({type: 'TEST'})
-	  }, 20000)
-	  //return ()=>{clearInterval(testInterval)}
+		setMqttClient((currentMqttClient: any) =>{
+			if(currentMqttClient !== null){
+				currentMqttClient.disconnect()
+			}
+			return Connect(onMessageArrived)
+		})
 	}, [])
 	
 
