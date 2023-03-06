@@ -25,8 +25,7 @@ export const MainLayoutContainer = styled.div`
         grid-template-rows: 1fr;
         grid-column-gap: 0px;
         grid-row-gap: 0px;
-
-            .team-card__expanded { grid-area: 1 / 1 / 2 / 3; }
+            .team-card__expanded { grid-area: 1 / 1 / 2 / 3;  }
             .team-card__counter  { grid-area: 1 / 3 / 2 / 8; background:black; }
     }
 
@@ -39,7 +38,6 @@ export const MainLayoutContainer = styled.div`
         grid-row-gap: 2px;
 
         .team-card_expand{
-            transform: scaleX(1.2) scaleY(1.1);
         }
     }
 `

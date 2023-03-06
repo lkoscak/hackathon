@@ -6,34 +6,33 @@ import {
     CardName,
     TeamCardCounter,
     Counter
-} 
-from "./teamCardStyle";
+}
+    from "./teamCardStyle";
 // #endregion
 
 //#region HelperFunctions
-    import 
-        { 
-            returnSymbol,
-            determineTeamCard 
-        } 
-        from "../../utils/helper";
-import { FunctionComponent } from "react";
+import {
+    returnSymbol,
+    determineTeamCard
+} from "../../utils/helper";
 // #endregion
 
-interface componentProps {
-    width:number,
-    height:number,
-    isExtended:boolean,
-    onClick:()=>void
-}
+import { forwardRef } from "react";
 
-const TeamCard : FunctionComponent<componentProps> = ({width,isExtended,height,onClick}) => {
-    return ( 
-        <TeamCardContainer 
-            onClick={onClick}
-            height={height}
-            width={width} 
-            className={determineTeamCard(isExtended)}
+type TeamCardProps = {
+    width: number;
+    height: number;
+    isExtended: boolean;
+};
+
+const TeamCard = forwardRef<HTMLDivElement, TeamCardProps>((props, ref) => {
+
+    return (
+        <TeamCardContainer
+            ref={ref}
+            height={props.height}
+            width={props.width}
+            className={determineTeamCard(props.isExtended)}
         >
             <TeamCardSymbol>
                 {returnSymbol("triangle")}
@@ -45,7 +44,7 @@ const TeamCard : FunctionComponent<componentProps> = ({width,isExtended,height,o
                 <Counter>145</Counter>
             </TeamCardCounter>
         </TeamCardContainer>
-     );
-}
- 
+    );
+})
+
 export default TeamCard;

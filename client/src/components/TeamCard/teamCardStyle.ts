@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled from "styled-components"
 
 interface ITeamCardContainerProps {
-    width:number,
-    height:number
+    width: number,
+    height: number
 }
 
 export const TeamCardContainer = styled.div<ITeamCardContainerProps>`
@@ -11,9 +11,9 @@ export const TeamCardContainer = styled.div<ITeamCardContainerProps>`
     flex-direction: column;
     background-color: #E0E0E0;
     transition: transform .3s ease-out;
-    transform-origin:1500px 9px;
-    width:${props => props.width }%;
-    height:${props => props.height }%;
+    transform: translateX(0px);
+    width:${props => props.width}%;
+    height:${props => props.height}%;
 `
 export const TeamCardSymbol = styled.div`
     display:flex;
