@@ -1,16 +1,13 @@
-<<<<<<< client/src/context/global-reducer.ts
-=======
 import {
 	NEW_REPORT,
-	UPDATE_REPORT
+	UPDATE_REPORT,
+	MOVE_COMPONENT
 } from "./actions";
->>>>>>> client/src/context/global-reducer.ts
 
-import { IGlobalContextType, GlobalAction, ITeamCard } from "./types";
+import { IGlobalContextType, GlobalAction, ITeamCard,Report } from "./types";
 
-<<<<<<< client/src/context/global-reducer.ts
 
-const reducer: (state: any, action: GlobalAction) => IGlobalContextType = (state, action) => {
+const reducer : (state: any, action: {type: string, payload: any}) => any = (state, action) => {
 	switch (action.type) {
 		case 'MOVE_COMPONENT':
 			const { component, fromParent, toParent, reportCount } = action.payload;
@@ -27,63 +24,37 @@ const reducer: (state: any, action: GlobalAction) => IGlobalContextType = (state
 			}
 
 			return {
-				reports: [...state.reports],
+				...state,
 				teamCardStatsWindowState: { ...state.teamCardStatsWindowState },
-				[fromParent]: fromParentCopy,
-				[toParent]: toParentCopy,
-				[reportCount]: repCount
+				reportCount: repCount
 			}
+
 		case "UPDATE_REPORT" :
 			const newState = [...state.reports]
-			state.reports.forEach(report => {
+			state.reports.forEach((report:Report)  => {
 				report.additonallInfo.activeCount = 0
 				if(report.id === action.payload.id ){
 					Object.assign(report, action.payload)
 				}
 			});
 			return {
+				...state,
 				reports: newState,
 			};
 		case "NEW_REPORT" : {
 			const newState = [...state.reports]
-			state.reports.forEach(report => {
+			state.reports.forEach((report:Report) => {
 				report.additonallInfo.activeCount = 0
 			});
 			action.payload.additonallInfo = {activeCount: 0}
 			newState.unshift(action.payload)
 			return {
+				...state,
 				reports: newState,
 			};
 		}
 		default: throw new Error(`No such action: ${action}`);
-=======
-const reducer : (state: IGlobalContextType, action: {type: string, payload: any}) => IGlobalContextType = (state, action) => {
-	if (action.type === NEW_REPORT) {
-		const newState = [...state.reports]
-		state.reports.forEach(report => {
-			report.additonallInfo.activeCount = 0
-		});
-		action.payload.additonallInfo = {activeCount: 0}
-		newState.unshift(action.payload)
-		return {
-			reports: newState,
-		};
-	}
-	if (action.type === UPDATE_REPORT) {
-		const newState = [...state.reports]
-		state.reports.forEach(report => {
-			report.additonallInfo.activeCount = 0
-			if(report.id === action.payload.id ){
-				Object.assign(report, action.payload)
-			}
-		});
-
-		return {
-			reports: newState,
-		};
->>>>>>> client/src/context/global-reducer.ts
-	}
-
 };
+}
 
 export default reducer;

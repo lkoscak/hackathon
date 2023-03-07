@@ -39,13 +39,15 @@ export interface ITeamCardStats {
 export type IGlobalContextType = {
     reports: Report[],
     teamCardStatsWindowState: ITeamCardStats,
+    dispatch: Dispatch<GlobalAction>,
+    reportCount:number
 }
 
-export type GlobalAction = { type: 'TEST', payload: {}; } | { type: 'MOVE_COMPONENT', payload: { component: ITeamCard, fromParent: string, toParent: string, reportCount: number }; };
+export type GlobalAction = { type: string, payload: object | null; } 
 
-export interface IGlobalContextValue {
-    teamCardStatsWindowState: ITeamCardStats,
-    reports: Report[];
-    dispatch: Dispatch<GlobalAction>;
-}
+// export interface IGlobalContextValue {
+//     teamCardStatsWindowState: ITeamCardStats,
+//     reports: Report[];
+//     dispatch: Dispatch<GlobalAction>;
+// }
 

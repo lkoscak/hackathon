@@ -127,12 +127,11 @@ const MainLayout = () => {
             setCardToExtend(getRandomCard(9))
             const isShownCard: boolean = teamCardStatsWindowState.teamCardStatsWindow2.components.length != 0;
             animteMoving(isShownCard);
-        }, 3000)
+        }, 7000)
         return () => {
 
             clearInterval(interval);
         };
-
     }, [cardToExtend])
 
     return (

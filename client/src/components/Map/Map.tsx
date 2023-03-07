@@ -40,7 +40,10 @@ const Map = () => {
     }, []);
 
     useEffect(() => {
+        console.log("mapInterval set")
         let focusMarkerInterval = setInterval(()=>{
+            console.log("Triggered");
+ 
             const nextActiveReport = fetchNextActiveReport()
             if(nextActiveReport){
                 nextActiveReport.additonallInfo.activeCount+=1;

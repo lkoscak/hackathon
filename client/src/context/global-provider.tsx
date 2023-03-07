@@ -2,10 +2,11 @@ import { useEffect, useReducer, useState } from "react";
 
 import GlobalContext from './global-context'
 import reducer from "./global-reducer";
-import { IGlobalContextType, IGlobalContextValue } from "../context/types";
+import { IGlobalContextType } from "../context/types";
 
 import { reports } from "../mocks/reports";
 import { teamCards } from "../mocks/teamCards";
+import { Connect, subscriptionsToActionsMap } from "../utils/mqtt";
 
 const initGlobalContext: IGlobalContextType = {
 	reports: reports,
@@ -16,21 +17,17 @@ const initGlobalContext: IGlobalContextType = {
 		teamCardStatsWindow2: {
 			components: []
 		}
-	},}
-
-import {IGlobalContextType} from "../context/types";
-
-import {reports} from "../mocks/reports";
-
-import { Connect, subscriptionsToActionsMap } from "../utils/mqtt";
-
-const initGlobalContext : IGlobalContextType = {
-	reports : reports
+	},
+	reportCount:0,
+	dispatch: () => { }
 }
+
+
+
+
 
 const GlobalProvider: React.FC<any> = (props) => {
 
-	const [globalState, dispatch] = useReducer(
 
 	const [mqttClient, setMqttClient] = useState<any>(null)
 
@@ -42,13 +39,6 @@ const GlobalProvider: React.FC<any> = (props) => {
 		})
 	}
 
-	//useEffect(() => {
-	//	const testInterval = setTimeout(()=>{
-	//		console.log('new report')
-	//		dispatchGlobalAction({type: 'TEST'})
-	//	}, 20000)
-	//}, [])
-
 	useEffect(() => {
 		setMqttClient((currentMqttClient: any) =>{
 			if(currentMqttClient !== null){
@@ -59,15 +49,14 @@ const GlobalProvider: React.FC<any> = (props) => {
 	}, [])
 	
 
-	const [globalState, dispatchGlobalAction] : [IGlobalContextType, (type: any) => void] = useReducer(
-        client/src/context/global-provider.tsx
+	const [globalState, dispatchGlobalAction] : [IGlobalContextType, (action: any) => void] = useReducer(
 		reducer,
 		initGlobalContext
 	);
 
-	const contextValue: IGlobalContextValue = {
+	const contextValue: IGlobalContextType = {
 		...globalState,
-		dispatch,
+		dispatch:dispatchGlobalAction
 	}
 
 	return (
