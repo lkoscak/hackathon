@@ -1,3 +1,4 @@
-export const TEST = "TEST";
-
 export const MOVE_COMPONENT = "MOVE_COMPONENT";
+export const NEW_REPORT = "NEW_REPORT"
+export const UPDATE_REPORT = "UPDATE_REPORT"
+

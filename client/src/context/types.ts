@@ -11,6 +11,9 @@ export type Report = {
     status: number,
     group: number,
     category: string,
+    additonallInfo: {
+        activeCount: number
+    },
     team: number,
     lat: number,
     lng: number
