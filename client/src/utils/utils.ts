@@ -10,8 +10,10 @@ export const markerIconsMap = new Map<number,string>(
     ]
 );
 
-export const getTopNReportsForDisplay = (reports: Report[], n: number) => {
-    return reports.sort((a, b) => {
+export const getTopNReportsForDisplay = (reports: Report[], n: number, getDeleted: boolean = false) => {
+    return reports.filter(report => {
+        return getDeleted ? true : report.status !== -1 // check status by db
+    }).sort((a, b) => {
         return new Date(b.created).getTime() - new Date(a.created).getTime();
     }).slice(0, n);
 }

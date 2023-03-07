@@ -25,8 +25,7 @@ const Map = () => {
     const {reports} = useGlobalContext();
 
     const topTenReportsForDisplay= useMemo(()=>getTopNReportsForDisplay(reports, 10), [reports])
-
-
+    
     const handleActiveReport = (report: Report) => {
         if (report.id === activeReport?.id) {
           return;
