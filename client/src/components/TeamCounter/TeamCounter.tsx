@@ -1,13 +1,9 @@
-//#region Importing Components
-import TeamCard from "../TeamCard/teamCard";
-// #endregion
-
 //#region Importing StyledComponents
 import { TeamCardPlaceHolder } from "./TeamCounterStyle";
 // #endregion
 
 //#region React
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 // #endregion
 
 type TeamCounterProps = {

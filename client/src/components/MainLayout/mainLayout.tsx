@@ -1,5 +1,6 @@
 //#region Importing ComponentsStyles
 import { MainLayoutContainer } from "./mainLayoutStyle"
+import { TeamCardCounter, TeamReportCounter } from "../TeamCounter/TeamCounterStyle";
 // #endregion
 
 //#region Importing Components
@@ -9,7 +10,7 @@ import TeamCounter from "../TeamCounter/TeamCounter";
 // #endregion
 
 //#region Importing React
-import { useState, useEffect, useRef, Ref } from "react";
+import { useState, useEffect, useRef } from "react";
 // #endregion
 
 //#region Importing GlobalContext
@@ -32,6 +33,8 @@ const MainLayout = () => {
 
     const [isExtended, setIsExtended] = useState(false);
     const [cardToExtend, setCardToExtend] = useState<number>();
+    const [teamReportCount, setTeamReportCount] = useState<number>();
+
 
     const { teamCardStatsWindowState, dispatch } = useGlobalContext();
 
@@ -43,42 +46,39 @@ const MainLayout = () => {
 
     const cardsContainerRef = useRef<HTMLDivElement | null>(null);
 
-    const moveComponent=(component: any, fromParent: string, toParent: string) => {
-        dispatch({ type: "MOVE_COMPONENT", payload: { component, fromParent, toParent } });
+    const moveComponent = (component: any, fromParent: string, toParent: string, reportCount: number) => {
+        dispatch({ type: "MOVE_COMPONENT", payload: { component, fromParent, toParent, reportCount } });
+        setTeamReportCount(reportCount);
     }
 
-    const handleMoveComponent = (isShown:boolean) => {
-        if(cardToExtend && isShown == false){
+    const handleMoveComponent = (isShown: boolean) => {
+        if (cardToExtend && isShown == false) {
             const componentToMove = teamCardStatsWindowState.teamCardStatsWindow1.components[cardToExtend];
-            moveComponent(componentToMove, "teamCardStatsWindow1", "teamCardStatsWindow2");
+            moveComponent(componentToMove, "teamCardStatsWindow1", "teamCardStatsWindow2", componentToMove.reportCount);
         }
-        else if(cardToExtend && isShown){
+        else if (cardToExtend && isShown) {
             const componentToMove = teamCardStatsWindowState.teamCardStatsWindow2.components[0];
-            moveComponent(componentToMove, "teamCardStatsWindow2", "teamCardStatsWindow1");
+            moveComponent(componentToMove, "teamCardStatsWindow2", "teamCardStatsWindow1", componentToMove.reportCount);
         }
     };
 
-    const animteMoving = (isShown:boolean) => {
-      
-        let componentRef :  HTMLDivElement | null = null;
-        let fromParent   :  HTMLDivElement | null = null;
-        let toParent     :  HTMLDivElement | null = null;
 
-        if(isShown==true)
-        {
-            console.log("It's not emtpy")  
-            console.log(cardToExtend);
+    const animteMoving = (isShown: boolean) => {
+
+        let componentRef: HTMLDivElement | null = null;
+        let fromParent: HTMLDivElement | null = null;
+        let toParent: HTMLDivElement | null = null;
+
+        if (isShown == true) {
             componentRef = shownCardRef.current;
             fromParent = teamCounterRef.current;
             toParent = cardsContainerRef.current;
         }
 
-        else
-        {        
-            console.log("It's emtpy")  
-            if(cardToExtend)
-                componentRef = cardsRefs.current[cardToExtend]; 
-            
+        else {
+            if (cardToExtend)
+                componentRef = cardsRefs.current[cardToExtend];
+
             fromParent = cardsContainerRef.current;
             toParent = teamCounterRef.current;
         }
@@ -87,14 +87,14 @@ const MainLayout = () => {
         const toRect = toParent?.getBoundingClientRect();
 
         if (fromRect && toRect) {
-            gsap.to(componentRef, {
+           gsap.to(componentRef, {
                 duration: 0.5,
                 x: toRect.left - fromRect.left,
                 y: toRect.top - fromRect.top,
                 onComplete: () => {
                     if (componentRef != null)
                         handleMoveComponent(isShown);
-                        //toParent?.appendChild(componentRef);
+                    //toParent?.appendChild(componentRef);
                     else return;
                 }
             })
@@ -102,47 +102,38 @@ const MainLayout = () => {
 
     }
 
-    const mapTeamCard = (isShown:boolean,componentToMap:ITeamCard[]) => {
-        return(
+    const mapTeamCard = (isShown: boolean, componentToMap: ITeamCard[]) => {
+        return (
             componentToMap.map(
                 (teamCard, index) => {
                     return (
                         <TeamCard
-                            ref={isShown== false ? el => cardsRefs.current[index] = el : shownCardRef }
+                            ref={isShown == false ? el => cardsRefs.current[index] = el : shownCardRef}
                             key={teamCard.id}
                             width={100}
                             height={100}
                             isExtended={isExtended}
+                            TeamName={teamCard.teamName}
+                            ReportCount={teamCard.reportCount}
                         />)
                 })
         )
     }
 
-    useEffect(() => {    
+   
+    useEffect(() => {
         setCardToExtend(getRandomCard(9))
-        const interval = setInterval(()=>
-        {
-            console.log("inInterval");
+        const interval = setInterval(() => {
             setCardToExtend(getRandomCard(9))
-            const isShownCard : boolean = teamCardStatsWindowState.teamCardStatsWindow2.components.length==0;
-            animteMoving(!isShownCard);
-                // if(teamCardStatsWindowState.teamCardStatsWindow2.components.length==0)
-                // {              
-                //     animteMoving(false)
-                // }
-                // else
-                // {
-                //     animteMoving(true)
-                // }
-        },3000)
-
+            const isShownCard: boolean = teamCardStatsWindowState.teamCardStatsWindow2.components.length != 0;
+            animteMoving(isShownCard);
+        }, 3000)
         return () => {
-            console.log("I am going to clear")
+
             clearInterval(interval);
         };
 
-
-    },[cardToExtend])
+    }, [cardToExtend])
 
     return (
         <MainLayoutContainer>
@@ -151,8 +142,12 @@ const MainLayout = () => {
 
             <div className="team-counter">
                 <TeamCounter ref={teamCounterRef} >
-                    {mapTeamCard(true,teamCardStatsWindowState.teamCardStatsWindow2.components)}
+                    {mapTeamCard(true, teamCardStatsWindowState.teamCardStatsWindow2.components)}
                 </TeamCounter>
+                <TeamCardCounter className="team-card__counter">
+                    <TeamReportCounter>Total number :</TeamReportCounter>
+                    <TeamReportCounter>{teamReportCount}</TeamReportCounter>
+                </TeamCardCounter>
             </div>
 
             <Map />
@@ -160,7 +155,7 @@ const MainLayout = () => {
             <div className="div5"><p>Hello</p></div>
 
             <div ref={cardsContainerRef} className="cards-container">
-                {mapTeamCard(false,teamCardStatsWindowState.teamCardStatsWindow1.components)}
+                {mapTeamCard(false, teamCardStatsWindowState.teamCardStatsWindow1.components)}
             </div>
 
             <div className="div7"> <p>Hello</p> </div>

@@ -18,6 +18,7 @@ export type Report = {
 
 export type ITeamCard = {
     id: number,
+    teamName: string,
     reportCount: number,
     symbol: string,
     color: string
@@ -37,7 +38,7 @@ export type IGlobalContextType = {
     teamCardStatsWindowState: ITeamCardStats,
 }
 
-export type GlobalAction = { type: 'TEST', payload: {}; } | { type: 'MOVE_COMPONENT', payload: { component: ITeamCard, fromParent: string, toParent: string }; };
+export type GlobalAction = { type: 'TEST', payload: {}; } | { type: 'MOVE_COMPONENT', payload: { component: ITeamCard, fromParent: string, toParent: string, reportCount: number }; };
 
 export interface IGlobalContextValue {
     teamCardStatsWindowState: ITeamCardStats,

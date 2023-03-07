@@ -23,6 +23,8 @@ type TeamCardProps = {
     width: number;
     height: number;
     isExtended: boolean;
+    TeamName: string;
+    ReportCount: number
 };
 
 const TeamCard = forwardRef<HTMLDivElement, TeamCardProps>((props, ref) => {
@@ -38,10 +40,10 @@ const TeamCard = forwardRef<HTMLDivElement, TeamCardProps>((props, ref) => {
                 {returnSymbol("triangle")}
             </TeamCardSymbol>
             <TeamCardName>
-                <CardName>Tim 1</CardName>
+                <CardName>{props.TeamName}</CardName>
             </TeamCardName>
             <TeamCardCounter>
-                <Counter>145</Counter>
+                <Counter>{props.ReportCount}</Counter>
             </TeamCardCounter>
         </TeamCardContainer>
     );

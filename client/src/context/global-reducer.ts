@@ -10,13 +10,15 @@ const reducer: (state: any, action: GlobalAction) => IGlobalContextType = (state
 				teamCardStatsWindowState: { ...state.teamCardStatsWindowState }
 			};
 		case 'MOVE_COMPONENT':
-			const { component, fromParent, toParent } = action.payload;
+			const { component, fromParent, toParent, reportCount } = action.payload;
 			const fromParentCopy = { ...state.teamCardStatsWindowState[fromParent] };
 			const toParentCopy = { ...state.teamCardStatsWindowState[toParent] };
+			let repCount: number = 0;
 			const componentIndex = fromParentCopy.components.findIndex(
 				(c: ITeamCard) => c.id === component.id
 			);
 			if (componentIndex !== -1) {
+				repCount = state.teamCardStatsWindowState["teamCardStatsWindow1"].components[componentIndex].reportCount;
 				fromParentCopy.components.splice(componentIndex, 1);
 				toParentCopy.components.push(component);
 			}
@@ -26,6 +28,7 @@ const reducer: (state: any, action: GlobalAction) => IGlobalContextType = (state
 				teamCardStatsWindowState: { ...state.teamCardStatsWindowState },
 				[fromParent]: fromParentCopy,
 				[toParent]: toParentCopy,
+				[reportCount]: repCount
 			}
 		default: throw new Error(`No such action: ${action}`);
 	}
