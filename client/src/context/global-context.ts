@@ -1,8 +1,13 @@
 import React from "react";
-import {IGlobalContextType} from "../context/types"
+import { IGlobalContextType, IGlobalContextValue } from "../context/types"
 
-const GlobalContext = React.createContext<IGlobalContextType>({
-       reports:[]
+const GlobalContext = React.createContext<IGlobalContextValue>({
+       teamCardStatsWindowState: {
+              teamCardStatsWindow1: { components: [] },
+              teamCardStatsWindow2: { components: [] }
+       },
+       reports: [],
+       dispatch: () => { }
 });
 
 export default GlobalContext;
