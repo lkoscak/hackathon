@@ -16,7 +16,6 @@ import useGlobalContext from "../../hooks/use-global-context";
 import { markerIconsMap, getTopNReportsForDisplay } from "../../utils/utils";
 import { Report } from "../../context/types";
 
-
 type LatLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 
@@ -40,10 +39,7 @@ const Map = () => {
     }, []);
 
     useEffect(() => {
-        console.log("mapInterval set")
         let focusMarkerInterval = setInterval(()=>{
-            console.log("Triggered");
- 
             const nextActiveReport = fetchNextActiveReport()
             if(nextActiveReport){
                 nextActiveReport.additonallInfo.activeCount+=1;
@@ -89,11 +85,11 @@ const Map = () => {
         //mapId: "b181cac70f27f5e6",
         disableDefaultUI: true,
         clickableIcons: false,
-    }), [])
+      }), [])
 
     const mapRef = useRef<google.maps.Map>()
 
-    const { isLoaded } = useLoadScript({
+    const {isLoaded} = useLoadScript({
         googleMapsApiKey: 'AIzaSyAVKiCx1vsLNJjQ2g5gXJwzF8vVihFQjY8',
     })
 
