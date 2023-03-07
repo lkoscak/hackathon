@@ -8,8 +8,7 @@ import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import {
   GoogleMap,
   MarkerF,
-  InfoWindowF,
-  InfoWindowProps
+  InfoWindowF
 } from "@react-google-maps/api";
 
 import useGlobalContext from "../../hooks/use-global-context";
@@ -111,7 +110,6 @@ const Map = () => {
         ) : null}
     </MarkerF>)
 
-    
     return (
         <MapContainer className="map-container">
             <GoogleMap zoom={13} center={mapCenter} mapContainerClassName="map" options={mapOptions} onLoad={onLoad}>

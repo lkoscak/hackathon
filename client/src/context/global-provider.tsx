@@ -6,7 +6,7 @@ import {IGlobalContextType} from "../context/types";
 
 import {reports} from "../mocks/reports";
 
-import { Connect, subscriptions } from "../utils/mqtt";
+import { Connect, subscriptionsToActionsMap } from "../utils/mqtt";
 
 const initGlobalContext : IGlobalContextType = {
 	reports : reports
@@ -18,6 +18,10 @@ const GlobalProvider: React.FC<any>  = (props) => {
 
 	const onMessageArrived = (topic: string, payload: any)=>{
 		console.log('Message arrived in provider')
+		dispatchGlobalAction({
+			type: subscriptionsToActionsMap.get(topic),
+			payload: payload
+		})
 	}
 
 	//useEffect(() => {

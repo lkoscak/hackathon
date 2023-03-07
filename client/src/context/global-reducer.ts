@@ -1,16 +1,31 @@
 import {
-	TEST
+	NEW_REPORT,
+	UPDATE_REPORT
 } from "./actions";
 
 import { IGlobalContextType } from "./types";
 
 const reducer : (state: IGlobalContextType, action: {type: string, payload: any}) => IGlobalContextType = (state, action) => {
-	if (action.type === TEST) {
+	if (action.type === NEW_REPORT) {
+		const newState = [...state.reports]
 		state.reports.forEach(report => {
 			report.additonallInfo.activeCount = 0
 		});
+		action.payload.additonallInfo = {activeCount: 0}
+		newState.unshift(action.payload)
+		return {
+			reports: newState,
+		};
+	}
+	if (action.type === UPDATE_REPORT) {
 		const newState = [...state.reports]
-		newState.unshift({...state.reports[1], id: Math.random().toString(), lat: 46.29, lng: 16.31, additonallInfo: {activeCount: 0}, created: '2023-03-02 12:00:00',})
+		state.reports.forEach(report => {
+			report.additonallInfo.activeCount = 0
+			if(report.id === action.payload.id ){
+				Object.assign(report, action.payload)
+			}
+		});
+
 		return {
 			reports: newState,
 		};

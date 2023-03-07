@@ -1,5 +1,6 @@
 import { System } from "typescript"
 import { generateUniqueId } from "./utils"
+import { NEW_REPORT, UPDATE_REPORT } from "../context/actions"
 
 const mqttHost = 'new-fleet.mobilisis.hr'
 const mqttPort = 443
@@ -28,6 +29,13 @@ export const subscriptions = [
     }
 ]
 
+export const subscriptionsToActionsMap = new Map<string,string>(
+    [
+        [subscriptions[0].topic, NEW_REPORT],
+        [subscriptions[1].topic, UPDATE_REPORT],
+    ]
+);
+
 export const Connect = (onMessageArrived: (topic: string, payload: any) => void) => {
 
     let reconnectInterval: ReturnType<typeof setInterval> | null = null 
@@ -53,7 +61,7 @@ export const Connect = (onMessageArrived: (topic: string, payload: any) => void)
 
     const onFailedConnect = ()=>{
         console.log('Connecting to mqtt server failed')
-        //retryConnect()
+        retryConnect()
     }
 
     const subscribe = (topic: string, options: {qos: number})=>{
