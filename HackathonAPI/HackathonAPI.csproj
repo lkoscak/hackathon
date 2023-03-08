@@ -216,11 +216,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\source\repos\fleet-web-portal\Fleet Web Portal\BaseApiContext\BaseApiContext.csproj">
-      <Project>{2eada111-475c-4046-bafb-8b5888cca07b}</Project>
+    <ProjectReference Include="libraries\BaseApiContext\BaseApiContext.csproj">
+      <Project>{358a2e44-ac95-4f1d-88f0-40ed85690f6f}</Project>
       <Name>BaseApiContext</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\source\repos\fleet-web-portal\Fleet Web Portal\CommonAPI\CommonAPI.csproj">
+    <ProjectReference Include="libraries\CommonAPI\CommonAPI.csproj">
       <Project>{34579b03-6b3e-4c8d-bef5-f84b284c69ad}</Project>
       <Name>CommonAPI</Name>
     </ProjectReference>
