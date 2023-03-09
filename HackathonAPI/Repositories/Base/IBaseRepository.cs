@@ -11,5 +11,9 @@ namespace HackathonAPI.Repositories.Base
     public interface IBaseRepository
     {
         Task<ServiceResponse<List<Status>>> GetAllStatuses();
+
+        Task<ServiceResponse<List<GroupModel>>> GetAllGroups();
+
+        Task<ServiceResponse<List<Team>>> GetAllTeams();
     }
 }

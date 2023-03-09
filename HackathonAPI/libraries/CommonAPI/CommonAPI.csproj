@@ -47,11 +47,5 @@
     <Compile Include="Model\Currency\Currency.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BaseApiContext\BaseApiContext.csproj">
-      <Project>{43E8F8E5-A6AD-4F19-8576-D481197974AF}</Project>
-      <Name>BaseApiContext</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

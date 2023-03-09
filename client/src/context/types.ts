@@ -36,11 +36,33 @@ export interface ITeamCardStats {
     teamCardStatsWindow2: TeamCardStatsWindow
 }
 
+type Status = {
+    id:number,
+    name:string,
+    description:string
+}
+
+type Group = {
+    id : number,
+    name : string,
+    description:string
+}
+
+type Team = {
+    id:number,
+    name:string,
+    color:string,
+    icon:string
+}
+
 export type IGlobalContextType = {
     reports: Report[],
     teamCardStatsWindowState: ITeamCardStats,
     dispatch: Dispatch<GlobalAction>,
-    reportCount:number
+    reportCount:number,
+    statuses:Status[],
+    groups:Group[],
+    teams:Team[]
 }
 
 export type GlobalAction = { type: string, payload: object | null; } 

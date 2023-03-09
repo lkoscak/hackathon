@@ -54,5 +54,65 @@ namespace HackathonAPI.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        [Route("group")]
+        public async Task<IHttpActionResult> GetAllGroups()
+        {
+            using (ContextManager)
+            {
+                try
+                {
+                    using (BaseManager bManager = new BaseManager(ContextManager))
+                    {
+                        ServiceResponse<List<GroupModel>> response = await bManager.GetAllGroups();
+                        if (response.IsSuccess)
+                        {
+                            return Ok(response.Data);
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextManager.loggerManager.error(ex, "Error in GetAllStatuses");
+                    return InternalServerError();
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("team")]
+        public async Task<IHttpActionResult> GetAllTeams()  
+        {
+            using (ContextManager)
+            {
+                try
+                {
+                    using (BaseManager bManager = new BaseManager(ContextManager))
+                    {
+                        ServiceResponse<List<Team>> response = await bManager.GetAllTeams();
+                        if (response.IsSuccess)
+                        {
+                            return Ok(response.Data);
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextManager.loggerManager.error(ex, "Error in GetAllStatuses");
+                    return InternalServerError();
+                }
+            }
+        }
+
+
     }
 }

@@ -1,7 +1,8 @@
 import {
 	NEW_REPORT,
 	UPDATE_REPORT,
-	MOVE_COMPONENT
+	MOVE_COMPONENT,
+	SET_INIT_DATA
 } from "./actions";
 
 import { IGlobalContextType, GlobalAction, ITeamCard,Report } from "./types";
@@ -9,7 +10,7 @@ import { IGlobalContextType, GlobalAction, ITeamCard,Report } from "./types";
 
 const reducer : (state: any, action: {type: string, payload: any}) => any = (state, action) => {
 	switch (action.type) {
-		case 'MOVE_COMPONENT':
+		case MOVE_COMPONENT:
 			const { component, fromParent, toParent, reportCount } = action.payload;
 			const fromParentCopy = { ...state.teamCardStatsWindowState[fromParent] };
 			const toParentCopy = { ...state.teamCardStatsWindowState[toParent] };
@@ -29,7 +30,7 @@ const reducer : (state: any, action: {type: string, payload: any}) => any = (sta
 				reportCount: repCount
 			}
 
-		case "UPDATE_REPORT" :
+		case UPDATE_REPORT :
 			const newState = [...state.reports]
 			newState.forEach((report:Report)  => {
 				report.additonallInfo.activeCount = 0
@@ -41,7 +42,7 @@ const reducer : (state: any, action: {type: string, payload: any}) => any = (sta
 				...state,
 				reports: newState,
 			};
-		case "NEW_REPORT" : {
+		case NEW_REPORT : {
 			const newState = [...state.reports]
 			newState.forEach((report:Report) => {
 				report.additonallInfo.activeCount = 0
@@ -52,8 +53,17 @@ const reducer : (state: any, action: {type: string, payload: any}) => any = (sta
 				...state,
 				reports: newState,
 			};
+		};
+		case SET_INIT_DATA:{
+			return {
+				...state,
+				groups:action.payload.groups,
+				teams:action.payload.teams,
+				statuses:action.payload.statuses
+			}
 		}
 		default: throw new Error(`No such action: ${action}`);
+
 };
 }
 
