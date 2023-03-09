@@ -1,10 +1,10 @@
 import { useState, useCallback } from "react";
 
-const useHttp = () => {
+const useHttp : () => any[]  = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 
-	const sendRequest = useCallback(async (requestConfig: any, handleData : (any) = null) => {
+	const sendRequest = useCallback(async (requestConfig: any, handleData : (data: any) => void ) => {
 		setIsLoading(true);
 		setError(null);
 		try {

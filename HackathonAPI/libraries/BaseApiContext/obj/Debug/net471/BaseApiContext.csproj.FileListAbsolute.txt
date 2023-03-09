@@ -35,3 +35,8 @@ C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\BaseApiContext\o
 C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\BaseApiContext\obj\Debug\net471\BaseApiContext.dll
 C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\BaseApiContext\obj\Debug\net471\BaseApiContext.pdb
 C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\BaseApiContext\obj\Debug\net471\BaseApiContext.csproj.AssemblyReference.cache
+C:\Users\mmrkonjic\source\repos\hack\hackathon-dashboard\HackathonAPI\libraries\BaseApiContext\obj\Debug\net471\BaseApiContext.csproj.AssemblyReference.cache
+C:\Users\mmrkonjic\source\repos\hack\hackathon-dashboard\HackathonAPI\libraries\BaseApiContext\obj\Debug\net471\BaseApiContext.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mmrkonjic\source\repos\hack\hackathon-dashboard\HackathonAPI\libraries\BaseApiContext\obj\Debug\net471\BaseApiContext.AssemblyInfoInputs.cache
+C:\Users\mmrkonjic\source\repos\hack\hackathon-dashboard\HackathonAPI\libraries\BaseApiContext\obj\Debug\net471\BaseApiContext.AssemblyInfo.cs
+C:\Users\mmrkonjic\source\repos\hack\hackathon-dashboard\HackathonAPI\libraries\BaseApiContext\obj\Debug\net471\BaseApiContext.csproj.CoreCompileInputs.cache

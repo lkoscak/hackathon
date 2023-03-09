@@ -24,5 +24,17 @@ namespace HackathonAPI.Managers
             ServiceResponse<List<Status>> response = await _baseRepository.GetAllStatuses();
             return response;
         }
+
+        public async Task<ServiceResponse<List<GroupModel>>> GetAllGroups()
+        {
+            ServiceResponse<List<GroupModel>> response = await _baseRepository.GetAllGroups();
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<Team>>> GetAllTeams()
+        {
+            ServiceResponse<List<Team>> response = await _baseRepository.GetAllTeams();
+            return response;
+        }
     }
 }

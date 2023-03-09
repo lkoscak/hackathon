@@ -11,10 +11,14 @@
           "System.Net.Http"
         ],
         "compile": {
-          "lib/net45/System.Net.Http.Formatting.dll": {}
+          "lib/net45/System.Net.Http.Formatting.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/System.Net.Http.Formatting.dll": {}
+          "lib/net45/System.Net.Http.Formatting.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.AspNet.WebApi.Core/5.2.7": {
@@ -23,10 +27,14 @@
           "Microsoft.AspNet.WebApi.Client": "5.2.7"
         },
         "compile": {
-          "lib/net45/System.Web.Http.dll": {}
+          "lib/net45/System.Web.Http.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/System.Web.Http.dll": {}
+          "lib/net45/System.Web.Http.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.AspNetCore.Authorization/6.0.1": {
@@ -37,19 +45,27 @@
           "Microsoft.Extensions.Options": "6.0.0"
         },
         "compile": {
-          "lib/net461/Microsoft.AspNetCore.Authorization.dll": {}
+          "lib/net461/Microsoft.AspNetCore.Authorization.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/Microsoft.AspNetCore.Authorization.dll": {}
+          "lib/net461/Microsoft.AspNetCore.Authorization.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.AspNetCore.Metadata/6.0.1": {
         "type": "package",
         "compile": {
-          "lib/net461/Microsoft.AspNetCore.Metadata.dll": {}
+          "lib/net461/Microsoft.AspNetCore.Metadata.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/Microsoft.AspNetCore.Metadata.dll": {}
+          "lib/net461/Microsoft.AspNetCore.Metadata.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
@@ -58,10 +74,14 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "compile": {
-          "lib/net461/Microsoft.Bcl.AsyncInterfaces.dll": {}
+          "lib/net461/Microsoft.Bcl.AsyncInterfaces.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/Microsoft.Bcl.AsyncInterfaces.dll": {}
+          "lib/net461/Microsoft.Bcl.AsyncInterfaces.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/6.0.0": {
@@ -71,10 +91,14 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "compile": {
-          "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
+          "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
+          "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.Logging.Abstractions/6.0.0": {
@@ -84,10 +108,14 @@
           "System.Memory": "4.5.4"
         },
         "compile": {
-          "lib/net461/Microsoft.Extensions.Logging.Abstractions.dll": {}
+          "lib/net461/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/Microsoft.Extensions.Logging.Abstractions.dll": {}
+          "lib/net461/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "build": {
           "build/_._": {}
@@ -103,10 +131,14 @@
           "System.ComponentModel.DataAnnotations"
         ],
         "compile": {
-          "lib/net461/Microsoft.Extensions.Options.dll": {}
+          "lib/net461/Microsoft.Extensions.Options.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/Microsoft.Extensions.Options.dll": {}
+          "lib/net461/Microsoft.Extensions.Options.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.Primitives/6.0.0": {
@@ -116,19 +148,27 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/net461/Microsoft.Extensions.Primitives.dll": {}
+          "lib/net461/Microsoft.Extensions.Primitives.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/Microsoft.Extensions.Primitives.dll": {}
+          "lib/net461/Microsoft.Extensions.Primitives.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Newtonsoft.Json/6.0.4": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Buffers/4.5.1": {
@@ -137,10 +177,14 @@
           "mscorlib"
         ],
         "compile": {
-          "ref/net45/System.Buffers.dll": {}
+          "ref/net45/System.Buffers.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Buffers.dll": {}
+          "lib/net461/System.Buffers.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Configuration.ConfigurationManager/6.0.0": {
@@ -152,10 +196,14 @@
           "System.Configuration"
         ],
         "compile": {
-          "lib/net461/System.Configuration.ConfigurationManager.dll": {}
+          "lib/net461/System.Configuration.ConfigurationManager.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Configuration.ConfigurationManager.dll": {}
+          "lib/net461/System.Configuration.ConfigurationManager.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/win/lib/net461/System.Configuration.ConfigurationManager.dll": {
@@ -172,10 +220,14 @@
           "mscorlib"
         ],
         "compile": {
-          "ref/net461/System.Data.SqlClient.dll": {}
+          "ref/net461/System.Data.SqlClient.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Data.SqlClient.dll": {}
+          "lib/net461/System.Data.SqlClient.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard2.0/System.Data.SqlClient.dll": {
@@ -200,10 +252,14 @@
           "mscorlib"
         ],
         "compile": {
-          "lib/net461/System.Memory.dll": {}
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Memory.dll": {}
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Numerics.Vectors/4.5.0": {
@@ -213,10 +269,14 @@
           "mscorlib"
         ],
         "compile": {
-          "ref/net46/System.Numerics.Vectors.dll": {}
+          "ref/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net46/System.Numerics.Vectors.dll": {}
+          "lib/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Runtime.Caching/6.0.0": {
@@ -246,10 +306,14 @@
           "mscorlib"
         ],
         "compile": {
-          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Security.AccessControl/6.0.0": {
@@ -258,10 +322,14 @@
           "System.Security.Principal.Windows": "5.0.0"
         },
         "compile": {
-          "lib/net461/System.Security.AccessControl.dll": {}
+          "lib/net461/System.Security.AccessControl.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Security.AccessControl.dll": {}
+          "lib/net461/System.Security.AccessControl.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/win/lib/net461/System.Security.AccessControl.dll": {
@@ -285,10 +353,14 @@
           "WindowsBase"
         ],
         "compile": {
-          "lib/net461/System.Security.Permissions.dll": {}
+          "lib/net461/System.Security.Permissions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Security.Permissions.dll": {}
+          "lib/net461/System.Security.Permissions.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/win/lib/net461/System.Security.Permissions.dll": {
@@ -304,10 +376,14 @@
           "mscorlib"
         ],
         "compile": {
-          "ref/net461/System.Security.Principal.Windows.dll": {}
+          "ref/net461/System.Security.Principal.Windows.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Security.Principal.Windows.dll": {}
+          "lib/net461/System.Security.Principal.Windows.dll": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/win/lib/net461/System.Security.Principal.Windows.dll": {
@@ -325,10 +401,14 @@
           "mscorlib"
         ],
         "compile": {
-          "lib/net461/System.Threading.Tasks.Extensions.dll": {}
+          "lib/net461/System.Threading.Tasks.Extensions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net461/System.Threading.Tasks.Extensions.dll": {}
+          "lib/net461/System.Threading.Tasks.Extensions.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Unity/5.11.10": {
@@ -337,12 +417,20 @@
           "System.Runtime.CompilerServices.Unsafe": "4.5.2"
         },
         "compile": {
-          "lib/net47/Unity.Abstractions.dll": {},
-          "lib/net47/Unity.Container.dll": {}
+          "lib/net47/Unity.Abstractions.dll": {
+            "related": ".pdb"
+          },
+          "lib/net47/Unity.Container.dll": {
+            "related": ".pdb"
+          }
         },
         "runtime": {
-          "lib/net47/Unity.Abstractions.dll": {},
-          "lib/net47/Unity.Container.dll": {}
+          "lib/net47/Unity.Abstractions.dll": {
+            "related": ".pdb"
+          },
+          "lib/net47/Unity.Container.dll": {
+            "related": ".pdb"
+          }
         }
       }
     }
@@ -1074,24 +1162,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lkoscak\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\mmrkonjic\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lkoscak\\Desktop\\hackathon 1.0\\HackathonAPI\\libraries\\BaseApiContext\\BaseApiContext.csproj",
+      "projectUniqueName": "C:\\Users\\mmrkonjic\\source\\repos\\hack\\hackathon-dashboard\\HackathonAPI\\libraries\\BaseApiContext\\BaseApiContext.csproj",
       "projectName": "BaseApiContext",
-      "projectPath": "C:\\Users\\lkoscak\\Desktop\\hackathon 1.0\\HackathonAPI\\libraries\\BaseApiContext\\BaseApiContext.csproj",
-      "packagesPath": "C:\\Users\\lkoscak\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lkoscak\\Desktop\\hackathon 1.0\\HackathonAPI\\libraries\\BaseApiContext\\obj\\",
+      "projectPath": "C:\\Users\\mmrkonjic\\source\\repos\\hack\\hackathon-dashboard\\HackathonAPI\\libraries\\BaseApiContext\\BaseApiContext.csproj",
+      "packagesPath": "C:\\Users\\mmrkonjic\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mmrkonjic\\source\\repos\\hack\\hackathon-dashboard\\HackathonAPI\\libraries\\BaseApiContext\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\lkoscak\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\mmrkonjic\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1099,7 +1182,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "http://nuget.mobilisis.local:5555/v3/index.json": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1139,7 +1221,7 @@
             "version": "[5.11.10, )"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.114\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

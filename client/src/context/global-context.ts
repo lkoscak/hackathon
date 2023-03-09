@@ -8,7 +8,10 @@ const GlobalContext = React.createContext<IGlobalContextType>({
        },
        reports: [],
        reportCount:0,
-       dispatch: () => { }
+       dispatch: () => { },
+       statuses:[],
+       groups:[],
+       teams:[]
 });
 
 export default GlobalContext;

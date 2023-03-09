@@ -16,3 +16,5 @@ C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\CommonAPI\obj\De
 C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\CommonAPI\obj\Debug\CommonAPI.csproj.CopyComplete
 C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\CommonAPI\obj\Debug\CommonAPI.dll
 C:\Users\lkoscak\source\repos\fleet-web-portal\Fleet Web Portal\CommonAPI\obj\Debug\CommonAPI.pdb
+C:\Users\mmrkonjic\source\repos\hack\hackathon-dashboard\HackathonAPI\libraries\CommonAPI\obj\Debug\CommonAPI.csproj.AssemblyReference.cache
+C:\Users\mmrkonjic\source\repos\hack\hackathon-dashboard\HackathonAPI\libraries\CommonAPI\obj\Debug\CommonAPI.csproj.CoreCompileInputs.cache
