@@ -41,7 +41,7 @@ const Map = () => {
         let focusMarkerInterval = setInterval(()=>{
             const nextActiveReport = fetchNextActiveReport()
             if(nextActiveReport){
-                nextActiveReport.additonallInfo.activeCount+=1;
+                nextActiveReport.additionallInfo.activeCount+=1;
                 const bounds = new google.maps.LatLngBounds();
                 bounds.extend({lat: nextActiveReport.lat, lng: nextActiveReport.lng})
                 mapRef.current?.panTo({lat: nextActiveReport.lat, lng: nextActiveReport.lng});
@@ -55,7 +55,7 @@ const Map = () => {
 
         function fetchNextActiveReport(){
             return topTenReportsForDisplay.find((report: Report)=>{
-                return report.additonallInfo.activeCount !== activeCounter
+                return report.additionallInfo.activeCount !== activeCounter
             })
         }
 
@@ -70,10 +70,11 @@ const Map = () => {
     }, [reports])
 
     const fitBoundsToReports = useCallback(() => {
+        if(topTenReportsForDisplay.length === 0) return
         const bounds = new google.maps.LatLngBounds();
         topTenReportsForDisplay.forEach((report: Report) => {bounds.extend({lat: report.lat, lng: report.lng})})
         mapRef.current?.fitBounds(bounds);
-    }, [activeCounter])
+    }, [activeCounter, topTenReportsForDisplay])
 
     const mapCenter = useMemo<LatLngLiteral>(() => ({
         lat: 46.305746,

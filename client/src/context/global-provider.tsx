@@ -9,12 +9,12 @@ import { reports } from "../mocks/reports";
 import { teamCards } from "../mocks/teamCards";
 import { Connect, subscriptionsToActionsMap } from "../utils/mqtt";
 import useHttp from "../hooks/use-http";
-import { GetAllStatuses,GetAllGroups,GetAllTeams } from "../utils/api";
+import { GetAllStatuses,GetAllGroups,GetAllTeams, GetAllReports } from "../utils/api";
 
 import { SET_INIT_DATA } from "./actions";
 
 const initGlobalContext: IGlobalContextType = {
-	reports: reports,
+	reports: [],
 	teamCardStatsWindowState: {
 		teamCardStatsWindow1: {
 			components: teamCards
@@ -65,13 +65,18 @@ const GlobalProvider: React.FC<any> = (props) => {
 					method: "GET",
 					headers:  {}
 				}).then(response => response.json());
+				const fetchReports= fetch(GetAllReports, {
+					method: "GET",
+					headers:  {}
+				}).then(response => response.json());
 
-				Promise.all([fetchGroups,fetchTeams,fetchStatuses]).then((response:any)=>
+				Promise.all([fetchGroups,fetchTeams,fetchStatuses, fetchReports]).then((response:any)=>
 				{
 					const result = {
 						groups:response[0],
 						teams:response[1],
-						statuses:response[2]
+						statuses:response[2],
+						reports:response[3] ? response[3].map((report: any) => {return {...report, additionallInfo: {activeCount: 0}}}) : [],
 					}
 					handleData(result);
 				}).catch(error=>{ console.log(error)})

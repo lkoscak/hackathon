@@ -1,5 +1,6 @@
 ﻿using BaseApiContext.ServiceResponse;
 using HackathonAPI.Models;
+using HackathonAPI.Models.Report;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,6 +23,71 @@ namespace HackathonAPI.Repositories.Base
             _contextManager = contextManager;
         }
 
+        public async Task<ServiceResponse<Report>> CreateReport(ReportCreate report)
+        {
+            try
+            {
+                Report createdReport = null;
+                using (SqlCommand sqlCommand = new SqlCommand("dbo.CreateReport", Connection, Transaction))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@title", SqlDbType.NVarChar).Value = report.title;
+                    sqlCommand.Parameters.Add("@description", SqlDbType.NVarChar).Value = report.description;
+                    sqlCommand.Parameters.Add("@creator", SqlDbType.NVarChar).Value = report.creator;
+                    sqlCommand.Parameters.Add("@images", SqlDbType.NVarChar).Value = report.images != null ? string.Join(";;;", report.images) : "";
+                    sqlCommand.Parameters.Add("@category", SqlDbType.NVarChar).Value = report.category;
+                    sqlCommand.Parameters.Add("@group", SqlDbType.Int).Value = report.group;
+                    sqlCommand.Parameters.Add("@lat", SqlDbType.Float).Value = report.lat;
+                    sqlCommand.Parameters.Add("@lng", SqlDbType.Float).Value = report.lng;
+                    sqlCommand.Parameters.Add("@key", SqlDbType.NVarChar).Value = "1";
+
+                    using (SqlDataReader data = await sqlCommand.ExecuteReaderAsync())
+                    {
+                        if (data.HasRows)
+                        {
+                            while (data.Read())
+                            {
+                                createdReport = new Report();
+                                if (data["report_id"] != DBNull.Value) createdReport.id = int.Parse(data["report_id"].ToString());
+                                if (data["report_title"] != DBNull.Value) createdReport.title = data["report_title"].ToString();
+                                if (data["report_decription"] != DBNull.Value) createdReport.description = data["report_decription"].ToString();
+                                if (data["report_created"] != DBNull.Value) DateTime.TryParse(data["report_created"].ToString(), out createdReport.created);
+                                if (data["report_creator"] != DBNull.Value) createdReport.creator = data["report_creator"].ToString();
+                                if (data["report_status"] != DBNull.Value) createdReport.status = int.Parse(data["report_status"].ToString());
+                                if (data["report_group"] != DBNull.Value) createdReport.group = int.Parse(data["report_group"].ToString());
+                                if (data["report_category"] != DBNull.Value) createdReport.category = data["report_category"].ToString();
+                                if (data["report_team"] != DBNull.Value) createdReport.team = int.Parse(data["report_team"].ToString());
+                                if (data["report_lat"] != DBNull.Value) createdReport.lat = float.Parse(data["report_lat"].ToString());
+                                if (data["report_lng"] != DBNull.Value) createdReport.lng = float.Parse(data["report_lng"].ToString());
+                                createdReport.images = new List<string>();
+                                if (data["report_images"] != DBNull.Value)
+                                {
+                                    createdReport.images.AddRange(data["report_images"].ToString().Split(new string[] { ";;;" }, StringSplitOptions.None));
+                                }
+                            }
+                        }
+                    }
+                }
+                return new ServiceResponse<Report>
+                {
+                    IsSuccess = createdReport != null,
+                    Message = null,
+                    StatusCode = 200,
+                    Data = createdReport
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<Report>
+                {
+                    IsSuccess = false,
+                    Message = null,
+                    StatusCode = 500,
+                    Data = null
+                };
+            }
+        }
+
         public async Task<ServiceResponse<List<GroupModel>>> GetAllGroups()
         {
             try
@@ -39,9 +105,9 @@ namespace HackathonAPI.Repositories.Base
                             while (data.Read())
                             {
                                 GroupModel group = new GroupModel();
-                                if (data["group_id"] != DBNull.Value) group.group_id = int.Parse(data["group_id"].ToString());
-                                if (data["group_name"] != DBNull.Value) group.group_name = data["group_name"].ToString();
-                                if (data["group_description"] != DBNull.Value) group.group_description = data["group_description"].ToString();
+                                if (data["group_id"] != DBNull.Value) group.id = int.Parse(data["group_id"].ToString());
+                                if (data["group_name"] != DBNull.Value) group.name = data["group_name"].ToString();
+                                if (data["group_description"] != DBNull.Value) group.description = data["group_description"].ToString();
                                 groups.Add(group);
                             }
                         }
@@ -59,6 +125,62 @@ namespace HackathonAPI.Repositories.Base
             catch (Exception)
             {
                 return new ServiceResponse<List<GroupModel>>
+                {
+                    IsSuccess = false,
+                    Message = null,
+                    StatusCode = 500,
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<ServiceResponse<List<Report>>> GetAllReports()
+        {
+            try
+            {
+                List<Report> reports = new List<Report>();
+                using (SqlCommand sqlCommand = new SqlCommand("dbo.GetAllReports", Connection, Transaction))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader data = await sqlCommand.ExecuteReaderAsync())
+                    {
+                        if (data.HasRows)
+                        {
+                            while (data.Read())
+                            {
+                                Report report = new Report();
+                                if (data["report_id"] != DBNull.Value) report.id = int.Parse(data["report_id"].ToString());
+                                if (data["report_title"] != DBNull.Value) report.title = data["report_title"].ToString();
+                                if (data["report_decription"] != DBNull.Value) report.description = data["report_decription"].ToString();
+                                if (data["report_created"] != DBNull.Value) DateTime.TryParse(data["report_created"].ToString(), out report.created);
+                                if (data["report_creator"] != DBNull.Value) report.creator = data["report_creator"].ToString();
+                                if (data["report_status"] != DBNull.Value) report.status = int.Parse(data["report_status"].ToString());
+                                if (data["report_group"] != DBNull.Value) report.group = int.Parse(data["report_group"].ToString());
+                                if (data["report_category"] != DBNull.Value) report.category = data["report_category"].ToString();
+                                if (data["report_team"] != DBNull.Value) report.team = int.Parse(data["report_team"].ToString());
+                                if (data["report_lat"] != DBNull.Value) report.lat = float.Parse(data["report_lat"].ToString());
+                                if (data["report_lng"] != DBNull.Value) report.lng = float.Parse(data["report_lng"].ToString());
+                                report.images = new List<string>();
+                                if (data["report_images"] != DBNull.Value) {
+                                    report.images.AddRange(data["report_images"].ToString().Split(new string[] { ";;;" }, StringSplitOptions.None));
+                                }
+                                reports.Add(report);
+                            }
+                        }
+                    }
+                }
+                return new ServiceResponse<List<Report>>
+                {
+                    IsSuccess = true,
+                    Message = null,
+                    StatusCode = 200,
+                    Data = reports
+                };
+            }
+            catch (Exception)
+            {
+                return new ServiceResponse<List<Report>>
                 {
                     IsSuccess = false,
                     Message = null,
@@ -128,10 +250,10 @@ namespace HackathonAPI.Repositories.Base
                             while (data.Read())
                             {
                                 Team team = new Team();
-                                if (data["team_id"] != DBNull.Value) team.team_id = int.Parse(data["status_id"].ToString());
-                                if (data["team_name"] != DBNull.Value) team.team_name = data["status_name"].ToString();
-                                if (data["team_color"] != DBNull.Value) team.team_color = data["status_description"].ToString();
-                                if (data["team_icon"] != DBNull.Value) team.team_icon = data["status_description"].ToString();
+                                if (data["team_id"] != DBNull.Value) team.id = int.Parse(data["status_id"].ToString());
+                                if (data["team_name"] != DBNull.Value) team.name = data["status_name"].ToString();
+                                if (data["team_color"] != DBNull.Value) team.color = data["status_description"].ToString();
+                                if (data["team_icon"] != DBNull.Value) team.icon = data["status_description"].ToString();
                                 teams.Add(team);
                             }
                         }

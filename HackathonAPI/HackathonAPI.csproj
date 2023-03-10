@@ -100,6 +100,9 @@
       <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MQTTnet, Version=4.1.4.563, Culture=neutral, PublicKeyToken=fdb7629f2e364a63, processorArchitecture=MSIL">
+      <HintPath>packages\MQTTnet.4.1.4.563\lib\net461\MQTTnet.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -243,8 +246,11 @@
     </Compile>
     <Compile Include="Managers\BaseManager.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Report\Report.cs" />
+    <Compile Include="Models\Report\ReportCreate.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="Mqtt\MqttManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Base\BaseRepository.cs" />
     <Compile Include="Repositories\Base\IBaseRepository.cs" />
@@ -311,9 +317,16 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\fleet-web-portal\Fleet Web Portal\BaseApiContext\BaseApiContext.csproj">
-      <Project>{3BF02A5D-F436-4F5B-9D21-18D676FCFAAE}</Project>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\source\repos\fleet-web-portal\Fleet Web Portal\BaseApiContext\BaseApiContext.csproj">
+      <Project>{8040e239-94e8-40c0-804c-303635f7daf3}</Project>
       <Name>BaseApiContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\source\repos\fleet-web-portal\Fleet Web Portal\CommonAPI\CommonAPI.csproj">
+      <Project>{34579b03-6b3e-4c8d-bef5-f84b284c69ad}</Project>
+      <Name>CommonAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
@@ -345,12 +358,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -11,7 +11,7 @@ export type Report = {
     status: number,
     group: number,
     category: string,
-    additonallInfo: {
+    additionallInfo: {
         activeCount: number
     },
     team: number,

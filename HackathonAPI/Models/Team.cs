@@ -7,9 +7,9 @@ namespace HackathonAPI.Models
 {
     public class Team
     {
-        public int team_id { get; set; }
-        public string team_name { get; set; }
-        public string team_color { get; set; }
-        public string team_icon { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string color { get; set; }
+        public string icon { get; set; }
     }
 }

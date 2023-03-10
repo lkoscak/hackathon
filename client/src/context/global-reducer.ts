@@ -33,7 +33,7 @@ const reducer : (state: any, action: {type: string, payload: any}) => any = (sta
 		case UPDATE_REPORT :
 			const newState = [...state.reports]
 			newState.forEach((report:Report)  => {
-				report.additonallInfo.activeCount = 0
+				report.additionallInfo.activeCount = 0
 				if(report.id === action.payload.id ){
 					Object.assign(report, action.payload)
 				}
@@ -45,9 +45,9 @@ const reducer : (state: any, action: {type: string, payload: any}) => any = (sta
 		case NEW_REPORT : {
 			const newState = [...state.reports]
 			newState.forEach((report:Report) => {
-				report.additonallInfo.activeCount = 0
+				report.additionallInfo.activeCount = 0
 			});
-			action.payload.additonallInfo = {activeCount: 0}
+			action.payload.additionallInfo = {activeCount: 0}
 			newState.unshift(action.payload)
 			return {
 				...state,
@@ -59,7 +59,8 @@ const reducer : (state: any, action: {type: string, payload: any}) => any = (sta
 				...state,
 				groups:action.payload.groups,
 				teams:action.payload.teams,
-				statuses:action.payload.statuses
+				statuses:action.payload.statuses,
+				reports: action.payload.reports
 			}
 		}
 		default: throw new Error(`No such action: ${action}`);

@@ -1,6 +1,7 @@
 ﻿using BaseApiContext.ServiceResponse;
 using HackathonAPI.Managers;
 using HackathonAPI.Models;
+using HackathonAPI.Models.Report;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +79,7 @@ namespace HackathonAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ContextManager.loggerManager.error(ex, "Error in GetAllStatuses");
+                    ContextManager.loggerManager.error(ex, "Error in GetAllGroups");
                     return InternalServerError();
                 }
             }
@@ -107,12 +108,68 @@ namespace HackathonAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ContextManager.loggerManager.error(ex, "Error in GetAllStatuses");
+                    ContextManager.loggerManager.error(ex, "Error in GetAllTeams");
                     return InternalServerError();
                 }
             }
         }
 
+        [HttpGet]
+        [Route("report")]
+        public async Task<IHttpActionResult> GetAllReports()
+        {
+            using (ContextManager)
+            {
+                try
+                {
+                    using (BaseManager bManager = new BaseManager(ContextManager))
+                    {
+                        ServiceResponse<List<Report>> response = await bManager.GetAllReports();
+                        if (response.IsSuccess)
+                        {
+                            return Ok(response.Data);
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextManager.loggerManager.error(ex, "Error in GetAllReports");
+                    return InternalServerError();
+                }
+            }
+        }
 
+        [HttpPost]
+        [Route("report")]
+        public async Task<IHttpActionResult> CreateReport(ReportCreate report)
+        {
+            using (ContextManager)
+            {
+                try
+                {
+                    using (BaseManager bManager = new BaseManager(ContextManager))
+                    {
+                        ServiceResponse<Report> response = await bManager.CreateReport(report);
+                        if (response.IsSuccess)
+                        {
+                            return Ok(response.Data.id);
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextManager.loggerManager.error(ex, "Error in CreateReport");
+                    return InternalServerError();
+                }
+            }
+        }
     }
 }

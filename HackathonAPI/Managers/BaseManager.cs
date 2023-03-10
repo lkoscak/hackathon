@@ -1,6 +1,9 @@
 ﻿using BaseApiContext.ServiceResponse;
 using HackathonAPI.Models;
+using HackathonAPI.Models.Report;
+using HackathonAPI.Mqtt;
 using HackathonAPI.Repositories.Base;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.Core.BusinessLogicManager;
@@ -34,6 +37,39 @@ namespace HackathonAPI.Managers
         public async Task<ServiceResponse<List<Team>>> GetAllTeams()
         {
             ServiceResponse<List<Team>> response = await _baseRepository.GetAllTeams();
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<Report>>> GetAllReports()
+        {
+            ServiceResponse<List<Report>> response = await _baseRepository.GetAllReports();
+            return response;
+        }
+        public async Task<ServiceResponse<Report>> CreateReport(ReportCreate report)
+        {
+            ServiceResponse<Report> response = await _baseRepository.CreateReport(report);
+            try
+            {
+                if (response.IsSuccess)
+                {
+                    _contextManager.loggerManager.info("Report successfully created. Transaction commited.");
+                    _contextManager.dbManager.Commit(this);
+                    MqttManager mqttManager = new MqttManager(_contextManager);
+                    await mqttManager.Publish("hackathon/report/new", Newtonsoft.Json.JsonConvert.SerializeObject(response.Data));
+                    mqttManager.DisconnectFromMqttServer();
+                }
+                else
+                {
+                    _contextManager.loggerManager.info("Report could not be created. Transaction rollback");
+                    _contextManager.dbManager.Rollback(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                _contextManager.dbManager.Rollback(this);
+                _contextManager.loggerManager.error(ex);
+                response.IsSuccess = false;
+            }
             return response;
         }
     }

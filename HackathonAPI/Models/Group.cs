@@ -7,8 +7,8 @@ namespace HackathonAPI.Models
 {
     public class GroupModel
     {
-        public int group_id { get; set; }
-        public string group_name { get; set; }
-        public string group_description { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
     }
 }
