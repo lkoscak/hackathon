@@ -56,7 +56,7 @@ namespace HackathonAPI.Managers
                     _contextManager.dbManager.Commit(this);
                     MqttManager mqttManager = new MqttManager(_contextManager);
                     await mqttManager.Publish("hackathon/report/new", Newtonsoft.Json.JsonConvert.SerializeObject(response.Data));
-                    mqttManager.DisconnectFromMqttServer();
+                    await mqttManager.DisconnectFromMqttServer();
                 }
                 else
                 {

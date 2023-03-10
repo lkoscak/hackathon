@@ -23,7 +23,7 @@ namespace HackathonAPI.Mqtt
             mqttFactory = new MqttFactory();
         }
 
-        public async void DisconnectFromMqttServer()
+        public async Task DisconnectFromMqttServer()
         {
             if (mqttClient != null && mqttClient.IsConnected)
             {
@@ -83,7 +83,7 @@ namespace HackathonAPI.Mqtt
                 MqttApplicationMessage applicationMessage = new MqttApplicationMessageBuilder()
                            .WithTopic(topic)
                            .WithPayload(payload)
-                           .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce)
+                           .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce)
                            .WithRetainFlag(false)
                            .Build();
 

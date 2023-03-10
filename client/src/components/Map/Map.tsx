@@ -22,6 +22,7 @@ type MapOptions = google.maps.MapOptions;
 const Map = () => {
     const [activeReport, setActiveReport] = useState<Report | null>(null);
     const [activeCounter, setActiveCounter] = useState<number>(1);
+    const [didZoomToFirstReport, setDidZoomToFirstReport] = useState<boolean>(true);
     const {reports} = useGlobalContext();
 
     const topTenReportsForDisplay= useMemo(()=>getTopNReportsForDisplay(reports, 10), [reports])
@@ -45,11 +46,17 @@ const Map = () => {
                 const bounds = new google.maps.LatLngBounds();
                 bounds.extend({lat: nextActiveReport.lat, lng: nextActiveReport.lng})
                 mapRef.current?.panTo({lat: nextActiveReport.lat, lng: nextActiveReport.lng});
+                //mapRef.current?.panToBounds(bounds);
+                if(!didZoomToFirstReport){
+                    mapRef.current?.setZoom(13);
+                    setDidZoomToFirstReport(true)
+                } 
                 handleActiveReport(nextActiveReport)
             }else{
                 fitBoundsToReports();
                 setActiveReport(null);
                 setActiveCounter(current => current+1)
+                setDidZoomToFirstReport(false)
             }
         }, 3000)
 
