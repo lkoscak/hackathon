@@ -1,4 +1,5 @@
 ﻿using BaseApiContext.ServiceResponse;
+using BaseApiContext.Validation.Attribute;
 using HackathonAPI.Managers;
 using HackathonAPI.Models;
 using HackathonAPI.Models.Report;
@@ -145,14 +146,29 @@ namespace HackathonAPI.Controllers
 
         [HttpPost]
         [Route("report")]
+        [ModelStateValidationActionFilter]
         public async Task<IHttpActionResult> CreateReport(ReportCreate report)
         {
+            if (report == null) {
+                ContextManager.loggerManager.info("Request data not provided");
+                return BadRequest("Request data not provided");
+            }
+            if (!report.AreCoordsValid())
+            {
+                ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
+                return BadRequest("Coordinates (lat, lng) are not valid");
+            }
             using (ContextManager)
             {
                 try
                 {
                     using (BaseManager bManager = new BaseManager(ContextManager))
                     {
+                        ServiceResponse<List<GroupModel>> getGroupResponse = await bManager.GetAllGroups();
+                        if (!getGroupResponse.IsSuccess || !getGroupResponse.Data.Any(group => group.id == report.group))
+                        {
+                            return BadRequest($"Provided group: {report.group} does not exist");
+                        }
                         ServiceResponse<Report> response = await bManager.CreateReport(report);
                         if (response.IsSuccess)
                         {
@@ -167,6 +183,135 @@ namespace HackathonAPI.Controllers
                 catch (Exception ex)
                 {
                     ContextManager.loggerManager.error(ex, "Error in CreateReport");
+                    return InternalServerError();
+                }
+            }
+        }
+
+        [HttpPut]
+        [Route("report/{id}")]
+        [ModelStateValidationActionFilter]
+        public async Task<IHttpActionResult> UpdateReport([FromBody] ReportUpdate report, [FromUri] int id = 0)
+        {
+            if (report == null)
+            {
+                ContextManager.loggerManager.info("Request data not provided");
+                return BadRequest("Request data not provided");
+            }
+            if (!report.AreCoordsValid())
+            {
+                ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
+                return BadRequest("Coordinates (lat, lng) are not valid");
+            }
+            using (ContextManager)
+            {
+                try
+                {
+                    using (BaseManager bManager = new BaseManager(ContextManager))
+                    {
+                        ServiceResponse<Report> getReportResponse = await bManager.GetReport(id);
+                        if (!getReportResponse.IsSuccess)
+                        {
+                            return BadRequest($"Report with given id: {id} does not exist");
+                        }
+                        ServiceResponse<List<GroupModel>> getGroupResponse = await bManager.GetAllGroups();
+                        if (!getGroupResponse.IsSuccess || !getGroupResponse.Data.Any(group => group.id == report.group))
+                        {
+                            return BadRequest($"Provided group: {report.group} does not exist");
+                        }
+                        ServiceResponse<Report> response = await bManager.UpdateReport(id, report);
+                        if (response.IsSuccess)
+                        {
+                            return Ok(response.Data.id);
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextManager.loggerManager.error(ex, "Error in UpdateReport");
+                    return InternalServerError();
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("report/{id}/status")]
+        [ModelStateValidationActionFilter]
+        public async Task<IHttpActionResult> ChangeReportStatus([FromBody] ReportStatusChange statusData, [FromUri] int id = 0)
+        {
+            if (statusData == null)
+            {
+                ContextManager.loggerManager.info("Request data not provided");
+                return BadRequest("Request data not provided");
+            }
+            using (ContextManager)
+            {
+                try
+                {
+                    using (BaseManager bManager = new BaseManager(ContextManager))
+                    {
+                        ServiceResponse<Report> getReportResponse = await bManager.GetReport(id);
+                        if (!getReportResponse.IsSuccess)
+                        {
+                            return BadRequest($"Report with given id: {id} does not exist");
+                        }
+                        ServiceResponse<List<Status>> getStatusResponse = await bManager.GetAllStatuses();
+                        if (!getStatusResponse.IsSuccess || !getStatusResponse.Data.Any(st => (st.id == statusData.status && st.id != 4)))
+                        {
+                            return BadRequest($"Provided status: {statusData.status} does not exist");
+                        }
+                        ServiceResponse<bool> response = await bManager.ChangeReportStatus(id, statusData);
+                        if (response.IsSuccess)
+                        {
+                            return Ok();
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextManager.loggerManager.error(ex, "Error in ChangeReportStatus");
+                    return InternalServerError();
+                }
+            }
+        }
+
+        [HttpDelete]
+        [Route("report/{id}")]
+        public async Task<IHttpActionResult> DeleteReport([FromUri] int id = 0)
+        {
+            using (ContextManager)
+            {
+                try
+                {
+                    using (BaseManager bManager = new BaseManager(ContextManager))
+                    {
+                        ServiceResponse<Report> getReportResponse = await bManager.GetReport(id);
+                        if (!getReportResponse.IsSuccess)
+                        {
+                            return BadRequest($"Report with given id: {id} does not exist or is already deleted");
+                        }
+                        ServiceResponse<bool> response = await bManager.ChangeReportStatus(id, new ReportStatusChange { status = 4});
+                        if (response.IsSuccess)
+                        {
+                            return Ok();
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ContextManager.loggerManager.error(ex, "Error in DeleteReport");
                     return InternalServerError();
                 }
             }

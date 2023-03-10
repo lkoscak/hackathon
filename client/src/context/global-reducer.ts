@@ -2,7 +2,8 @@ import {
 	NEW_REPORT,
 	UPDATE_REPORT,
 	MOVE_COMPONENT,
-	SET_INIT_DATA
+	SET_INIT_DATA,
+	CHANGE_REPORT_STATUS
 } from "./actions";
 
 import { IGlobalContextType, GlobalAction, ITeamCard,Report } from "./types";
@@ -63,6 +64,20 @@ const reducer : (state: any, action: {type: string, payload: any}) => any = (sta
 				reports: action.payload.reports
 			}
 		}
+		case CHANGE_REPORT_STATUS :
+			{
+				const newState = [...state.reports]
+				newState.forEach((report:Report)  => {
+					report.additionallInfo.activeCount = 0
+					if(report.id === action.payload.id ){
+						report.status = action.payload.status
+					}
+				});
+				return {
+					...state,
+					reports: newState,
+				};
+			}
 		default: throw new Error(`No such action: ${action}`);
 
 };

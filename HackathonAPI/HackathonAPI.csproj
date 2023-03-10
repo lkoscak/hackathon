@@ -248,6 +248,8 @@
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Report\Report.cs" />
     <Compile Include="Models\Report\ReportCreate.cs" />
+    <Compile Include="Models\Report\ReportStatusChange.cs" />
+    <Compile Include="Models\Report\ReportUpdate.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Mqtt\MqttManager.cs" />

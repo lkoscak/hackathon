@@ -88,6 +88,161 @@ namespace HackathonAPI.Repositories.Base
             }
         }
 
+        public async Task<ServiceResponse<bool>> ChangeStatus(int id, int status)
+        {
+            try
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("dbo.ChangeStatus", Connection, Transaction))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    sqlCommand.Parameters.Add("@status", SqlDbType.Int).Value = status;
+                    sqlCommand.Parameters.Add("@key", SqlDbType.NVarChar).Value = "1";
+                    await sqlCommand.ExecuteNonQueryAsync();
+                }
+                return new ServiceResponse<bool>
+                {
+                    IsSuccess = true,
+                    Message = null,
+                    StatusCode = 200,
+                    Data = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<bool>
+                {
+                    IsSuccess = false,
+                    Message = null,
+                    StatusCode = 500,
+                    Data = false
+                };
+            }
+        }
+
+        public async Task<ServiceResponse<Report>> UpdateReport(int id, ReportUpdate report)
+        {
+            try
+            {
+                Report updatedReport = null;
+                using (SqlCommand sqlCommand = new SqlCommand("dbo.UpdateReport", Connection, Transaction))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    sqlCommand.Parameters.Add("@title", SqlDbType.NVarChar).Value = report.title;
+                    sqlCommand.Parameters.Add("@description", SqlDbType.NVarChar).Value = report.description;
+                    sqlCommand.Parameters.Add("@creator", SqlDbType.NVarChar).Value = report.creator;
+                    sqlCommand.Parameters.Add("@images", SqlDbType.NVarChar).Value = report.images != null ? string.Join(";;;", report.images) : "";
+                    sqlCommand.Parameters.Add("@category", SqlDbType.NVarChar).Value = report.category;
+                    sqlCommand.Parameters.Add("@group", SqlDbType.Int).Value = report.group;
+                    sqlCommand.Parameters.Add("@lat", SqlDbType.Float).Value = report.lat;
+                    sqlCommand.Parameters.Add("@lng", SqlDbType.Float).Value = report.lng;
+
+                    using (SqlDataReader data = await sqlCommand.ExecuteReaderAsync())
+                    {
+                        if (data.HasRows)
+                        {
+                            while (data.Read())
+                            {
+                                updatedReport = new Report();
+                                if (data["report_id"] != DBNull.Value) updatedReport.id = int.Parse(data["report_id"].ToString());
+                                if (data["report_title"] != DBNull.Value) updatedReport.title = data["report_title"].ToString();
+                                if (data["report_decription"] != DBNull.Value) updatedReport.description = data["report_decription"].ToString();
+                                if (data["report_created"] != DBNull.Value) DateTime.TryParse(data["report_created"].ToString(), out updatedReport.created);
+                                if (data["report_creator"] != DBNull.Value) updatedReport.creator = data["report_creator"].ToString();
+                                if (data["report_status"] != DBNull.Value) updatedReport.status = int.Parse(data["report_status"].ToString());
+                                if (data["report_group"] != DBNull.Value) updatedReport.group = int.Parse(data["report_group"].ToString());
+                                if (data["report_category"] != DBNull.Value) updatedReport.category = data["report_category"].ToString();
+                                if (data["report_team"] != DBNull.Value) updatedReport.team = int.Parse(data["report_team"].ToString());
+                                if (data["report_lat"] != DBNull.Value) updatedReport.lat = float.Parse(data["report_lat"].ToString());
+                                if (data["report_lng"] != DBNull.Value) updatedReport.lng = float.Parse(data["report_lng"].ToString());
+                                updatedReport.images = new List<string>();
+                                if (data["report_images"] != DBNull.Value)
+                                {
+                                    updatedReport.images.AddRange(data["report_images"].ToString().Split(new string[] { ";;;" }, StringSplitOptions.None));
+                                }
+                            }
+                        }
+                    }
+                }
+                return new ServiceResponse<Report>
+                {
+                    IsSuccess = updatedReport != null,
+                    Message = null,
+                    StatusCode = 200,
+                    Data = updatedReport
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<Report>
+                {
+                    IsSuccess = false,
+                    Message = null,
+                    StatusCode = 500,
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<ServiceResponse<Report>> GetReport(int id)
+        {
+            try
+            {
+                Report report = null;
+                using (SqlCommand sqlCommand = new SqlCommand("dbo.GetReportById", Connection, Transaction))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    sqlCommand.Parameters.Add("@key", SqlDbType.NVarChar).Value = "1";
+
+                    using (SqlDataReader data = await sqlCommand.ExecuteReaderAsync())
+                    {
+                        if (data.HasRows)
+                        {
+                            while (data.Read())
+                            {
+                                report = new Report();
+                                if (data["report_id"] != DBNull.Value) report.id = int.Parse(data["report_id"].ToString());
+                                if (data["report_title"] != DBNull.Value) report.title = data["report_title"].ToString();
+                                if (data["report_decription"] != DBNull.Value) report.description = data["report_decription"].ToString();
+                                if (data["report_created"] != DBNull.Value) DateTime.TryParse(data["report_created"].ToString(), out report.created);
+                                if (data["report_creator"] != DBNull.Value) report.creator = data["report_creator"].ToString();
+                                if (data["report_status"] != DBNull.Value) report.status = int.Parse(data["report_status"].ToString());
+                                if (data["report_group"] != DBNull.Value) report.group = int.Parse(data["report_group"].ToString());
+                                if (data["report_category"] != DBNull.Value) report.category = data["report_category"].ToString();
+                                if (data["report_team"] != DBNull.Value) report.team = int.Parse(data["report_team"].ToString());
+                                if (data["report_lat"] != DBNull.Value) report.lat = float.Parse(data["report_lat"].ToString());
+                                if (data["report_lng"] != DBNull.Value) report.lng = float.Parse(data["report_lng"].ToString());
+                                report.images = new List<string>();
+                                if (data["report_images"] != DBNull.Value)
+                                {
+                                    report.images.AddRange(data["report_images"].ToString().Split(new string[] { ";;;" }, StringSplitOptions.None));
+                                }
+                            }
+                        }
+                    }
+                }
+                return new ServiceResponse<Report>
+                {
+                    IsSuccess = report != null,
+                    Message = null,
+                    StatusCode = 200,
+                    Data = report
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<Report>
+                {
+                    IsSuccess = false,
+                    Message = null,
+                    StatusCode = 500,
+                    Data = null
+                };
+            }
+        }
+
         public async Task<ServiceResponse<List<GroupModel>>> GetAllGroups()
         {
             try
@@ -250,10 +405,10 @@ namespace HackathonAPI.Repositories.Base
                             while (data.Read())
                             {
                                 Team team = new Team();
-                                if (data["team_id"] != DBNull.Value) team.id = int.Parse(data["status_id"].ToString());
-                                if (data["team_name"] != DBNull.Value) team.name = data["status_name"].ToString();
-                                if (data["team_color"] != DBNull.Value) team.color = data["status_description"].ToString();
-                                if (data["team_icon"] != DBNull.Value) team.icon = data["status_description"].ToString();
+                                if (data["team_id"] != DBNull.Value) team.id = int.Parse(data["team_id"].ToString());
+                                if (data["team_name"] != DBNull.Value) team.name = data["team_name"].ToString();
+                                if (data["team_color"] != DBNull.Value) team.color = data["team_color"].ToString();
+                                if (data["team_icon"] != DBNull.Value) team.icon = data["team_icon"].ToString();
                                 teams.Add(team);
                             }
                         }

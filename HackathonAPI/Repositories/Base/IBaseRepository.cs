@@ -19,5 +19,8 @@ namespace HackathonAPI.Repositories.Base
         Task<ServiceResponse<List<Report>>> GetAllReports();
 
         Task<ServiceResponse<Report>> CreateReport(ReportCreate report);
+        Task<ServiceResponse<Report>> UpdateReport(int id, ReportUpdate report);
+        Task<ServiceResponse<Report>> GetReport(int id);
+        Task<ServiceResponse<bool>> ChangeStatus(int id, int status);
     }
 }

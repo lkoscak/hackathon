@@ -2,5 +2,6 @@ export const MOVE_COMPONENT = "MOVE_COMPONENT";
 export const NEW_REPORT = "NEW_REPORT"
 export const UPDATE_REPORT = "UPDATE_REPORT"
 export const SET_INIT_DATA = "SET_INIT_DATA"
+export const CHANGE_REPORT_STATUS = "CHANGE_REPORT_STATUS"
 
 

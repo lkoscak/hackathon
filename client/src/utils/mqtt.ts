@@ -1,6 +1,6 @@
 import { System } from "typescript"
 import { generateUniqueId } from "./utils"
-import { NEW_REPORT, UPDATE_REPORT } from "../context/actions"
+import { NEW_REPORT, UPDATE_REPORT, CHANGE_REPORT_STATUS } from "../context/actions"
 
 const mqttHost = 'new-fleet.mobilisis.hr'
 const mqttPort = 443
@@ -26,6 +26,12 @@ export const subscriptions = [
         options: {
             qos: 1
         }
+    },
+    {
+        topic: 'hackathon/report/status',
+        options: {
+            qos: 1
+        }
     }
 ]
 
@@ -33,6 +39,7 @@ export const subscriptionsToActionsMap = new Map<string,string>(
     [
         [subscriptions[0].topic, NEW_REPORT],
         [subscriptions[1].topic, UPDATE_REPORT],
+        [subscriptions[2].topic, CHANGE_REPORT_STATUS],
     ]
 );
 

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace HackathonAPI.Models.Report
 {
-    public class ReportCreate
+    public class ReportUpdate
     {
         [Required(ErrorMessage = "{0} is required")]
         public string title { get; set; }

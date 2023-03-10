@@ -58,7 +58,7 @@ const Map = () => {
                 setActiveCounter(current => current+1)
                 setDidZoomToFirstReport(false)
             }
-        }, 3000)
+        }, 5000)
 
         function fetchNextActiveReport(){
             return topTenReportsForDisplay.find((report: Report)=>{
