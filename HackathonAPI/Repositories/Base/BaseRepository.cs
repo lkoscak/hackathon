@@ -34,7 +34,7 @@ namespace HackathonAPI.Repositories.Base
                     sqlCommand.Parameters.Add("@title", SqlDbType.NVarChar).Value = report.title;
                     sqlCommand.Parameters.Add("@description", SqlDbType.NVarChar).Value = report.description;
                     sqlCommand.Parameters.Add("@creator", SqlDbType.NVarChar).Value = report.creator;
-                    sqlCommand.Parameters.Add("@images", SqlDbType.NVarChar).Value = report.images != null ? string.Join(";;;", report.images) : "";
+                    sqlCommand.Parameters.Add("@images", SqlDbType.NVarChar).Value = report.images != null && report.images.Count > 0 ? string.Join(";;;", report.images) : "";
                     sqlCommand.Parameters.Add("@category", SqlDbType.NVarChar).Value = report.category;
                     sqlCommand.Parameters.Add("@group", SqlDbType.Int).Value = report.group;
                     sqlCommand.Parameters.Add("@lat", SqlDbType.Float).Value = report.lat;
@@ -60,7 +60,7 @@ namespace HackathonAPI.Repositories.Base
                                 if (data["report_lat"] != DBNull.Value) createdReport.lat = float.Parse(data["report_lat"].ToString());
                                 if (data["report_lng"] != DBNull.Value) createdReport.lng = float.Parse(data["report_lng"].ToString());
                                 createdReport.images = new List<string>();
-                                if (data["report_images"] != DBNull.Value)
+                                if (data["report_images"] != DBNull.Value && !string.IsNullOrEmpty(data["report_images"].ToString()))
                                 {
                                     createdReport.images.AddRange(data["report_images"].ToString().Split(new string[] { ";;;" }, StringSplitOptions.None));
                                 }
@@ -157,7 +157,7 @@ namespace HackathonAPI.Repositories.Base
                                 if (data["report_lat"] != DBNull.Value) updatedReport.lat = float.Parse(data["report_lat"].ToString());
                                 if (data["report_lng"] != DBNull.Value) updatedReport.lng = float.Parse(data["report_lng"].ToString());
                                 updatedReport.images = new List<string>();
-                                if (data["report_images"] != DBNull.Value)
+                                if (data["report_images"] != DBNull.Value && !string.IsNullOrEmpty(data["report_images"].ToString()))
                                 {
                                     updatedReport.images.AddRange(data["report_images"].ToString().Split(new string[] { ";;;" }, StringSplitOptions.None));
                                 }
