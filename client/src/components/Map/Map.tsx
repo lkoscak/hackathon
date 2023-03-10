@@ -89,7 +89,7 @@ const Map = () => {
     }), [])
 
     const mapOptions = useMemo<MapOptions>(() => ({
-        //mapId: "b181cac70f27f5e6",
+        mapId: "120f247832b54e4f",
         disableDefaultUI: true,
         clickableIcons: false,
       }), [])
