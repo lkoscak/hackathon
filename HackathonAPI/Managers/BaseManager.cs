@@ -5,9 +5,13 @@ using HackathonAPI.Mqtt;
 using HackathonAPI.Repositories.Base;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WebApi.Core.BusinessLogicManager;
 using WebApi.Core.Context;
+using WebApi.Core.Files.Model;
 
 namespace HackathonAPI.Managers
 {
@@ -50,11 +54,13 @@ namespace HackathonAPI.Managers
             ServiceResponse<Report> response = await _baseRepository.GetReport(id);
             return response;
         }
-        public async Task<ServiceResponse<Report>> CreateReport(ReportCreate report)
+        public async Task<ServiceResponse<Report>> CreateReport(ReportCreate report, List<MultipartFileData> images)
         {
-            ServiceResponse<Report> response = await _baseRepository.CreateReport(report);
+            ServiceResponse<Report> response = null;
             try
             {
+                DataTable formatedImages = FormatImagesForDB(images);
+                response = await _baseRepository.CreateReport(report, formatedImages);
                 if (response.IsSuccess)
                 {
                     _contextManager.loggerManager.info("Report successfully created. Transaction commited.");
@@ -77,11 +83,13 @@ namespace HackathonAPI.Managers
             }
             return response;
         }
-        public async Task<ServiceResponse<Report>> UpdateReport(int id, ReportUpdate report)
+        public async Task<ServiceResponse<Report>> UpdateReport(int id, ReportUpdate report, List<MultipartFileData> images)
         {
-            ServiceResponse<Report> response = await _baseRepository.UpdateReport(id, report);
+            ServiceResponse<Report> response = null;
             try
             {
+                DataTable formatedImages = FormatImagesForDB(images);
+                response = await _baseRepository.UpdateReport(id, report, formatedImages);
                 if (response.IsSuccess)
                 {
                     _contextManager.loggerManager.info("Report successfully updated. Transaction commited.");
@@ -102,6 +110,12 @@ namespace HackathonAPI.Managers
                 _contextManager.loggerManager.error(ex);
                 response.IsSuccess = false;
             }
+            return response;
+        }
+
+        public async Task<ServiceResponse<ApiFileResult>> GetReportImage(int id)
+        {
+            ServiceResponse<ApiFileResult> response = await _baseRepository.GetReportImage(id);
             return response;
         }
 
@@ -132,6 +146,45 @@ namespace HackathonAPI.Managers
                 response.IsSuccess = false;
             }
             return response;
+        }
+
+        private DataTable FormatImagesForDB(List<MultipartFileData> images) {
+            List<Image> formatedImages = new List<Image>();
+            try
+            {
+                foreach (MultipartFileData image in images)
+                {
+                    byte[] buffer = null;
+                    using (FileStream fs = File.OpenRead(image.LocalFileName))
+                    {
+                        buffer = new byte[fs.Length];
+                        fs.Read(buffer, 0, (int)fs.Length);
+                    }
+                    formatedImages.Add(new Image
+                    {
+                        name = Path.GetFileName(string.Concat(image.Headers.ContentDisposition.FileName.Split(Path.GetInvalidFileNameChars()))),
+                        type = Path.GetExtension(string.Concat(image.Headers.ContentDisposition.FileName.Split(Path.GetInvalidFileNameChars()))),
+                        content = buffer,
+                    });
+                }
+            }
+            catch (Exception){}
+
+            DataTable DT = new DataTable("dbo.Report_image");
+            DT.Columns.Add("ri_name", typeof(string));
+            DT.Columns.Add("ri_type", typeof(string));
+            DT.Columns.Add("ri_content", typeof(byte[]));
+
+            foreach (Image image in formatedImages)
+            {
+                DataRow row = DT.NewRow();
+                row["ri_name"] = image.name;
+                row["ri_type"] = image.type;
+                row["ri_content"] = image.content;
+                DT.Rows.Add(row);
+            }
+
+            return DT;
         }
     }
 }

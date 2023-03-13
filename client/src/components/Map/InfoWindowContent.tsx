@@ -12,7 +12,7 @@ const InfoWindowContent : React.FC<InfoWindowContentProps> = ({report}) => {
   return (
     <InfoWindowContainer>
         {
-          report.images.length > 0 ? <img src={report.images[0]}></img> : <div className="title">{report.title}</div>
+          report.images.length > 0 ? <img src={`http://localhost:50842/v1/hackathon/report/image/${report.images[0]}`}></img> : <div className="title">{report.title}</div>
         }
         <div className="info">
           {

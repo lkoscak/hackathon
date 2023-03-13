@@ -246,6 +246,7 @@
     </Compile>
     <Compile Include="Managers\BaseManager.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Image.cs" />
     <Compile Include="Models\Report\Report.cs" />
     <Compile Include="Models\Report\ReportCreate.cs" />
     <Compile Include="Models\Report\ReportStatusChange.cs" />

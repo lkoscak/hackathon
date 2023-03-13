@@ -5,12 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using WebApi.Core.Config;
 using WebApi.Core.Context;
+using WebApi.Core.Files.Model;
+
 namespace HackathonAPI.Repositories.Base
 {
     public class BaseRepository : WebApi.Core.Repository.BaseRepository, IBaseRepository
@@ -23,7 +26,7 @@ namespace HackathonAPI.Repositories.Base
             _contextManager = contextManager;
         }
 
-        public async Task<ServiceResponse<Report>> CreateReport(ReportCreate report)
+        public async Task<ServiceResponse<Report>> CreateReport(ReportCreate report, DataTable images)
         {
             try
             {
@@ -34,7 +37,7 @@ namespace HackathonAPI.Repositories.Base
                     sqlCommand.Parameters.Add("@title", SqlDbType.NVarChar).Value = report.title;
                     sqlCommand.Parameters.Add("@description", SqlDbType.NVarChar).Value = report.description;
                     sqlCommand.Parameters.Add("@creator", SqlDbType.NVarChar).Value = report.creator;
-                    sqlCommand.Parameters.Add("@images", SqlDbType.NVarChar).Value = report.images != null && report.images.Count > 0 ? string.Join(";;;", report.images) : "";
+                    sqlCommand.Parameters.Add("@images", SqlDbType.Structured).Value = images;
                     sqlCommand.Parameters.Add("@category", SqlDbType.NVarChar).Value = report.category;
                     sqlCommand.Parameters.Add("@group", SqlDbType.Int).Value = report.group;
                     sqlCommand.Parameters.Add("@lat", SqlDbType.Float).Value = report.lat;
@@ -120,7 +123,7 @@ namespace HackathonAPI.Repositories.Base
             }
         }
 
-        public async Task<ServiceResponse<Report>> UpdateReport(int id, ReportUpdate report)
+        public async Task<ServiceResponse<Report>> UpdateReport(int id, ReportUpdate report, DataTable images)
         {
             try
             {
@@ -132,7 +135,7 @@ namespace HackathonAPI.Repositories.Base
                     sqlCommand.Parameters.Add("@title", SqlDbType.NVarChar).Value = report.title;
                     sqlCommand.Parameters.Add("@description", SqlDbType.NVarChar).Value = report.description;
                     sqlCommand.Parameters.Add("@creator", SqlDbType.NVarChar).Value = report.creator;
-                    sqlCommand.Parameters.Add("@images", SqlDbType.NVarChar).Value = report.images != null ? string.Join(";;;", report.images) : "";
+                    sqlCommand.Parameters.Add("@images", SqlDbType.Structured).Value = images;
                     sqlCommand.Parameters.Add("@category", SqlDbType.NVarChar).Value = report.category;
                     sqlCommand.Parameters.Add("@group", SqlDbType.Int).Value = report.group;
                     sqlCommand.Parameters.Add("@lat", SqlDbType.Float).Value = report.lat;
@@ -429,6 +432,49 @@ namespace HackathonAPI.Repositories.Base
                     IsSuccess = false,
                     Message = null,
                     StatusCode = 500,
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<ServiceResponse<ApiFileResult>> GetReportImage(int id)
+        {
+            ApiFileResult result = null;
+            try
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("dbo.GetReportImageById", Connection, Transaction))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+                    using (SqlDataReader data = await sqlCommand.ExecuteReaderAsync())
+                    {
+                        if (data.HasRows)
+                        {
+                            data.Read();
+                            string name = data["image_name"].ToString();
+                            string type = data["image_type"].ToString();
+                            byte[] content = (byte[])data["image_content"];
+                            MemoryStream stream = new MemoryStream(content);
+                            result = new ApiFileResult(stream, $"image/{type.Remove(0, 1)}", name);
+                        }
+                    }
+                }
+                return new ServiceResponse<ApiFileResult>
+                {
+                    IsSuccess = result != null,
+                    Message = null,
+                    StatusCode = result != null ? 200 : 404,
+                    Data = result
+                };
+            }
+            catch (Exception)
+            {
+                return new ServiceResponse<ApiFileResult>
+                {
+                    IsSuccess = false,
+                    Message = null,
+                    StatusCode = 404,
                     Data = null
                 };
             }

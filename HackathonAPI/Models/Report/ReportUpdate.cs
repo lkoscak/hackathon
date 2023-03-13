@@ -15,12 +15,22 @@ namespace HackathonAPI.Models.Report
         public string creator { get; set; }
         public List<string> images { get; set; }
         [Required(ErrorMessage = "{0} is required")]
-        public int group { get; set; }
+        public int? group { get; set; }
         public string category { get; set; }
         [Required(ErrorMessage = "{0} is required")]
         public float? lat { get; set; }
         [Required(ErrorMessage = "{0} is required")]
         public float? lng { get; set; }
+
+        public string getValidationErrors()
+        {
+            List<string> validationErrors = new List<string>();
+            if (string.IsNullOrEmpty(title)) validationErrors.Add("title is required");
+            if (string.IsNullOrEmpty(description)) validationErrors.Add("description is required");
+            if (group == null) validationErrors.Add("group is required");
+
+            return validationErrors.Count > 0 ? String.Join(", ", validationErrors) : null;
+        }
 
         public bool AreCoordsValid()
         {

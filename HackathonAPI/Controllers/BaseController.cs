@@ -3,14 +3,19 @@ using BaseApiContext.Validation.Attribute;
 using HackathonAPI.Managers;
 using HackathonAPI.Models;
 using HackathonAPI.Models.Report;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using WebApi.Core.Context;
 using WebApi.Core.Controller;
+using WebApi.Core.Files.Model;
 
 namespace HackathonAPI.Controllers
 {
@@ -146,22 +151,57 @@ namespace HackathonAPI.Controllers
 
         [HttpPost]
         [Route("report")]
-        [ModelStateValidationActionFilter]
-        public async Task<IHttpActionResult> CreateReport(ReportCreate report)
+        public async Task<IHttpActionResult> CreateReport()
         {
-            if (report == null) {
-                ContextManager.loggerManager.info("Request data not provided");
-                return BadRequest("Request data not provided");
-            }
-            if (!report.AreCoordsValid())
+            if (!Request.Content.IsMimeMultipartContent())
             {
-                ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
-                return BadRequest("Coordinates (lat, lng) are not valid");
+                return StatusCode(HttpStatusCode.UnsupportedMediaType);
             }
+
             using (ContextManager)
             {
                 try
                 {
+                    ReportCreate report = null;
+                    string root = System.Configuration.ConfigurationManager.AppSettings["DocumentImagesPath"];
+                    if (!Directory.Exists(root))
+                    {
+                        Directory.CreateDirectory(root);
+                        ContextManager.loggerManager.info("Creating directory => " + root);
+                    }
+                    var provider = new MultipartFormDataStreamProvider(root);
+                    await Request.Content.ReadAsMultipartAsync(provider);
+                    foreach (var key in provider.FormData.AllKeys)
+                    {
+                        foreach (var val in provider.FormData.GetValues(key))
+                        {
+                            if (key.Equals("data"))
+                            {
+                                report = JsonConvert.DeserializeObject<ReportCreate>(val);
+                            }
+                        }
+                    }
+
+                    if (report == null)
+                    {
+                        ContextManager.loggerManager.info("Request data not provided");
+                        return BadRequest("Request data not provided");
+                    }
+                    string validationError = report.getValidationErrors();
+                    if (validationError != null)
+                    {
+                        ContextManager.loggerManager.info($"Request data not valid: {validationError}");
+                        return BadRequest(validationError);
+                    }
+                    if (!report.AreCoordsValid())
+                    {
+                        ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
+                        return BadRequest("Coordinates (lat, lng) are not valid");
+                    }
+
+                    List<MultipartFileData> attachments = new List<MultipartFileData>();
+                    attachments.AddRange(provider.FileData);
+
                     using (BaseManager bManager = new BaseManager(ContextManager))
                     {
                         ServiceResponse<List<GroupModel>> getGroupResponse = await bManager.GetAllGroups();
@@ -169,7 +209,7 @@ namespace HackathonAPI.Controllers
                         {
                             return BadRequest($"Provided group: {report.group} does not exist");
                         }
-                        ServiceResponse<Report> response = await bManager.CreateReport(report);
+                        ServiceResponse<Report> response = await bManager.CreateReport(report, attachments);
                         if (response.IsSuccess)
                         {
                             return Ok(response.Data.id);
@@ -179,6 +219,7 @@ namespace HackathonAPI.Controllers
                             return InternalServerError();
                         }
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -188,25 +229,152 @@ namespace HackathonAPI.Controllers
             }
         }
 
+        //[HttpPost]
+        //[Route("report")]
+        //[ModelStateValidationActionFilter]
+        //public async Task<IHttpActionResult> CreateReport(ReportCreate report)
+        //{
+        //    if (report == null) {
+        //        ContextManager.loggerManager.info("Request data not provided");
+        //        return BadRequest("Request data not provided");
+        //    }
+        //    if (!report.AreCoordsValid())
+        //    {
+        //        ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
+        //        return BadRequest("Coordinates (lat, lng) are not valid");
+        //    }
+        //    using (ContextManager)
+        //    {
+        //        try
+        //        {
+        //            using (BaseManager bManager = new BaseManager(ContextManager))
+        //            {
+        //                ServiceResponse<List<GroupModel>> getGroupResponse = await bManager.GetAllGroups();
+        //                if (!getGroupResponse.IsSuccess || !getGroupResponse.Data.Any(group => group.id == report.group))
+        //                {
+        //                    return BadRequest($"Provided group: {report.group} does not exist");
+        //                }
+        //                ServiceResponse<Report> response = await bManager.CreateReport(report);
+        //                if (response.IsSuccess)
+        //                {
+        //                    return Ok(response.Data.id);
+        //                }
+        //                else
+        //                {
+        //                    return InternalServerError();
+        //                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ContextManager.loggerManager.error(ex, "Error in CreateReport");
+        //            return InternalServerError();
+        //        }
+        //    }
+        //}
+
+        //[HttpPut]
+        //[Route("report/{id}")]
+        //[ModelStateValidationActionFilter]
+        //public async Task<IHttpActionResult> UpdateReport([FromBody] ReportUpdate report, [FromUri] int id = 0)
+        //{
+        //    if (report == null)
+        //    {
+        //        ContextManager.loggerManager.info("Request data not provided");
+        //        return BadRequest("Request data not provided");
+        //    }
+        //    if (!report.AreCoordsValid())
+        //    {
+        //        ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
+        //        return BadRequest("Coordinates (lat, lng) are not valid");
+        //    }
+        //    using (ContextManager)
+        //    {
+        //        try
+        //        {
+        //            using (BaseManager bManager = new BaseManager(ContextManager))
+        //            {
+        //                ServiceResponse<Report> getReportResponse = await bManager.GetReport(id);
+        //                if (!getReportResponse.IsSuccess)
+        //                {
+        //                    return BadRequest($"Report with given id: {id} does not exist");
+        //                }
+        //                ServiceResponse<List<GroupModel>> getGroupResponse = await bManager.GetAllGroups();
+        //                if (!getGroupResponse.IsSuccess || !getGroupResponse.Data.Any(group => group.id == report.group))
+        //                {
+        //                    return BadRequest($"Provided group: {report.group} does not exist");
+        //                }
+        //                ServiceResponse<Report> response = await bManager.UpdateReport(id, report);
+        //                if (response.IsSuccess)
+        //                {
+        //                    return Ok(response.Data.id);
+        //                }
+        //                else
+        //                {
+        //                    return InternalServerError();
+        //                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ContextManager.loggerManager.error(ex, "Error in UpdateReport");
+        //            return InternalServerError();
+        //        }
+        //    }
+        //}
         [HttpPut]
         [Route("report/{id}")]
-        [ModelStateValidationActionFilter]
-        public async Task<IHttpActionResult> UpdateReport([FromBody] ReportUpdate report, [FromUri] int id = 0)
+        public async Task<IHttpActionResult> UpdateReport([FromUri] int id = 0)
         {
-            if (report == null)
+            if (!Request.Content.IsMimeMultipartContent())
             {
-                ContextManager.loggerManager.info("Request data not provided");
-                return BadRequest("Request data not provided");
+                return StatusCode(HttpStatusCode.UnsupportedMediaType);
             }
-            if (!report.AreCoordsValid())
-            {
-                ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
-                return BadRequest("Coordinates (lat, lng) are not valid");
-            }
+
             using (ContextManager)
             {
                 try
                 {
+                    ReportUpdate report = null;
+                    string root = System.Configuration.ConfigurationManager.AppSettings["DocumentImagesPath"];
+                    if (!Directory.Exists(root))
+                    {
+                        Directory.CreateDirectory(root);
+                        ContextManager.loggerManager.info("Creating directory => " + root);
+                    }
+                    var provider = new MultipartFormDataStreamProvider(root);
+                    await Request.Content.ReadAsMultipartAsync(provider);
+                    foreach (var key in provider.FormData.AllKeys)
+                    {
+                        foreach (var val in provider.FormData.GetValues(key))
+                        {
+                            if (key.Equals("data"))
+                            {
+                                report = JsonConvert.DeserializeObject<ReportUpdate>(val);
+                            }
+                        }
+                    }
+
+                    if (report == null)
+                    {
+                        ContextManager.loggerManager.info("Request data not provided");
+                        return BadRequest("Request data not provided");
+                    }
+                    string validationError = report.getValidationErrors();
+                    if (validationError != null)
+                    {
+                        ContextManager.loggerManager.info($"Request data not valid: {validationError}");
+                        return BadRequest(validationError);
+                    }
+                    if (!report.AreCoordsValid())
+                    {
+                        ContextManager.loggerManager.info("Coordinates (lat, lng) are not valid");
+                        return BadRequest("Coordinates (lat, lng) are not valid");
+                    }
+
+                    List<MultipartFileData> attachments = new List<MultipartFileData>();
+                    attachments.AddRange(provider.FileData);
+
                     using (BaseManager bManager = new BaseManager(ContextManager))
                     {
                         ServiceResponse<Report> getReportResponse = await bManager.GetReport(id);
@@ -219,7 +387,7 @@ namespace HackathonAPI.Controllers
                         {
                             return BadRequest($"Provided group: {report.group} does not exist");
                         }
-                        ServiceResponse<Report> response = await bManager.UpdateReport(id, report);
+                        ServiceResponse<Report> response = await bManager.UpdateReport(id, report, attachments);
                         if (response.IsSuccess)
                         {
                             return Ok(response.Data.id);
@@ -229,10 +397,11 @@ namespace HackathonAPI.Controllers
                             return InternalServerError();
                         }
                     }
+
                 }
                 catch (Exception ex)
                 {
-                    ContextManager.loggerManager.error(ex, "Error in UpdateReport");
+                    ContextManager.loggerManager.error(ex, "Error in CreateReport");
                     return InternalServerError();
                 }
             }
@@ -314,6 +483,32 @@ namespace HackathonAPI.Controllers
                     ContextManager.loggerManager.error(ex, "Error in DeleteReport");
                     return InternalServerError();
                 }
+            }
+        }
+
+        [HttpGet]
+        [Route("report/image/{id}")]
+        public async Task<IHttpActionResult> GetReportImage([FromUri] int id = 0)
+        {
+            try
+            {
+                using (BaseManager bManager = new BaseManager(ContextManager))
+                {
+                    ServiceResponse<ApiFileResult> response = await bManager.GetReportImage(id);
+                    if (response.IsSuccess)
+                    {
+                        return response.Data;
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ContextManager.loggerManager.error(ex, "Error in GetReportImage");
+                return InternalServerError();
             }
         }
     }
